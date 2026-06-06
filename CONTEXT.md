@@ -1,16 +1,26 @@
-# Contexte du projet Localizy
+# Contexte du projet Localizy Website
 
 ## État actuel
 
-Le site est fonctionnel avec Next.js 16 + Tailwind, configuré pour export statique vers OVH.
+Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
+
+**URL de test** : https://new.localizy.fr  
+**URL production** : https://localizy.fr (actuellement WordPress, à remplacer quand prêt)  
+**Repo GitHub** : https://github.com/Localizy-agence/website
+
+### Stack technique
+- Next.js 16 avec App Router
+- Tailwind CSS 4
+- Export statique (`output: "export"`)
+- Déploiement automatique via GitHub Actions + FTP
 
 ### Ce qui est en place
-- Structure Next.js avec App Router (`src/app/`)
-- Design system complet dans `globals.css` (toutes les variables CSS)
-- Assets copiés dans `public/` (logos, mascottes, stickers, fonts)
-- Composants créés dans `src/components/`
-- Page d'accueil fonctionnelle
-- Config export statique pour hébergement OVH (`next.config.ts`)
+- Homepage complète avec toutes les sections
+- Design system complet dans `globals.css`
+- Carousel avis Google (9 avis réels)
+- Section réalisations avec images clients
+- Section services (Sites web, SEO & GMB, SaaS/IA)
+- Déploiement automatique sur push vers main
 
 ### Fichiers clés
 ```
@@ -26,66 +36,57 @@ src/
 │   ├── Underline.tsx
 │   └── sections/
 │       ├── Hero.tsx
-│       ├── Reviews.tsx
-│       ├── Services.tsx
-│       ├── Realisations.tsx
+│       ├── Reviews.tsx      # Carousel 9 avis Google
+│       ├── Services.tsx     # 3 cartes (Sites, SEO, SaaS)
+│       ├── Realisations.tsx # 3 projets clients
 │       ├── Pourquoi.tsx
 │       ├── Stats.tsx
 │       ├── LinkedIn.tsx
 │       └── FinalCTA.tsx
 ├── lib/
-│   └── assets.ts         # Registre typé des assets (optionnel)
+│   └── assets.ts
+.github/
+└── workflows/
+    └── deploy.yml        # GitHub Actions auto-deploy
 ```
 
-## Problèmes à corriger
+## Déploiement
 
-### 1. Refaire les composants proprement
+### Workflow automatique
+À chaque push sur `main` :
+1. GitHub Actions build le projet
+2. Upload via FTP vers o2switch
+3. Site mis à jour sur new.localizy.fr
 
-Les composants actuels ont été convertis rapidement depuis le prototype. Problèmes :
+### Secrets GitHub configurés
+- `FTP_HOST` : ftp.localizy.fr
+- `FTP_USER` : website@new.localizy.fr
+- `FTP_PASSWORD` : (secret)
 
-- **Trop de styles inline** (`style={{...}}`) — difficile à maintenir
-- **Variables CSS non utilisées** — les tokens `--space-*`, `--radius-*`, `--text-*` existent mais ne sont pas utilisés
-- **Mélange Tailwind / valeurs en dur** — incohérent
-- **Problèmes d'alignement et d'espacement**
-
-### 2. Plan de refactoring
-
-Pour chaque composant :
-
-1. **Supprimer les styles inline**
-2. **Utiliser les variables CSS du design system** :
-   - `--space-*` pour margins/paddings
-   - `--radius-*` pour border-radius
-   - `--text-*` et `--display-*` pour font-size
-   - `--leading-*` pour line-height
-   - `--tracking-*` pour letter-spacing
-   - `--shadow-*` pour box-shadow
-   - `--lz-*` pour les couleurs
-3. **Créer des classes Tailwind custom** qui mappent sur les tokens si besoin
-4. **Utiliser les classes utilitaires** : `.lz-display`, `.lz-body`, `.lz-eyebrow`, `.lz-meta`, `.lz-card`
-
-### 3. Ordre suggéré
-
-1. `Button.tsx` — composant de base réutilisé partout
-2. `Header.tsx` et `Footer.tsx` — présents sur toutes les pages
-3. `Hero.tsx` — section principale
-4. Autres sections une par une
-
-## Commandes utiles
-
+### Commandes
 ```bash
-# Développement
+# Développement local
 npm run dev
 
-# Build pour production (génère /out pour OVH)
+# Build pour production
 npm run build
 
-# Le prototype original est sauvegardé dans
-~/Desktop/_design-prototype/
+# Push = déploiement automatique
+git add . && git commit -m "message" && git push
 ```
 
-## Notes
+## Fichiers de documentation
+- `GUIDE-DEPLOIEMENT.md` — Guide complet pour déployer une nouvelle app
+- `README-DEPLOY.md` — Documentation technique déploiement
 
+## Prochaines étapes
+- [ ] Finaliser le contenu des sections
+- [ ] Optimiser les images (< 100 Ko chacune)
+- [ ] Ajouter visuels LinkedIn
+- [ ] Créer les autres pages (Services, Portfolio, Contact, etc.)
+- [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
+
+## Notes
 - "Lyon" a été remplacé par "Oise" partout
-- Le logo footer était déformé — corrigé avec `object-contain`
-- Le registre d'assets typé (`src/lib/assets.ts`) est optionnel mais recommandé
+- Les images réalisations sont dans `public/images/`
+- Le WordPress actuel reste sur localizy.fr jusqu'à validation du nouveau site
