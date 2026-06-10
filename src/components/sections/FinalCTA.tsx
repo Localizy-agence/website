@@ -26,11 +26,11 @@ export default function FinalCTA() {
         <div className="final-cta-contact">
           <div>
             <div className="final-cta-contact-label">Email</div>
-            <div className="final-cta-contact-value">hello@localizy.fr</div>
+            <div className="final-cta-contact-value">contact@localizy.fr</div>
           </div>
           <div>
             <div className="final-cta-contact-label">Téléphone</div>
-            <div className="final-cta-contact-value">06 12 34 56 78</div>
+            <div className="final-cta-contact-value">07 81 18 94 24</div>
           </div>
           <div>
             <div className="final-cta-contact-label">Bureau</div>

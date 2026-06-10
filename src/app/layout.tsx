@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <head>
+        <link rel="stylesheet" href="/chatbot/chatbot.css" />
+      </head>
+      <body>
+        {children}
+        <Script
+          src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script src="/chatbot/config.js" strategy="beforeInteractive" />
+        <Script src="/chatbot/chatbot.js" strategy="afterInteractive" />
+      </body>
     </html>
   );
 }

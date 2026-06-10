@@ -43,7 +43,7 @@ export default function Header() {
       <div className="flex-1" />
 
       <span className="header-phone hidden lg:block cursor-pointer">
-        06 12 34 56 78
+        07 81 18 94 24
       </span>
 
       <button className="header-cta">

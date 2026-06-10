@@ -1,0 +1,764 @@
+/* ============================================================
+   Localizy Assistant — Widget Chatbot
+   Aligné sur le Design System Localizy (DS Localizy) :
+   - Palette : navy #31445E, lavande #9699CE, rouge CTA #FF6B6B
+   - Typo : Clash Display (display) + Work Sans (body)
+   - Ombres douces neutres, boutons pill, rayons 12/16px
+   ------------------------------------------------------------
+   Les couleurs principales sont injectées en JS :
+   --lz-color  (data-color, défaut navy)
+   --lz-accent (data-accent, défaut rouge CTA)
+   ============================================================ */
+
+/* ---- Fonts du DS (CDN officiels — repli système si indispo) ---- */
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+/* Conteneur racine : isole nos styles et porte les tokens */
+#lz-chatbot {
+  /* Tokens couleur (overridés en JS via data-color / data-accent) */
+  --lz-color: #31445E;        /* navy — primaire */
+  --lz-accent: #FF6B6B;       /* rouge — CTA */
+  --lz-lavender: #9699CE;     /* lavande — accent secondaire */
+  --lz-lavender-soft: #BABBDE;
+
+  /* Neutres DS */
+  --lz-bg-messages: #F5F5FA;  /* --lz-bg */
+  --lz-white: #FFFFFF;
+  --lz-text: #31445E;         /* texte primaire = navy */
+  --lz-text-dark: #151515;
+  --lz-grey-200: #E2E2EE;
+  --lz-grey-400: #9C9CB4;
+  --lz-grey-500: #6E6E86;
+  --lz-success: #4FB286;
+
+  /* Rayons DS */
+  --lz-radius-sm: 8px;
+  --lz-radius-md: 12px;       /* cartes */
+  --lz-radius-lg: 16px;       /* bulles messages */
+  --lz-radius-xl: 20px;       /* fenêtre */
+  --lz-radius-pill: 9999px;
+
+  /* Ombres DS (douces, neutres) */
+  --lz-shadow-sm: 0 2px 6px rgba(35, 49, 66, 0.06), 0 1px 2px rgba(35, 49, 66, 0.04);
+  --lz-shadow-md: 0 8px 24px rgba(35, 49, 66, 0.08), 0 2px 4px rgba(35, 49, 66, 0.04);
+  --lz-shadow-pop: 0 24px 60px rgba(35, 49, 66, 0.18);
+
+  /* Motion DS */
+  --lz-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --lz-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Typo DS */
+  --lz-font-display: "Clash Display", "Space Grotesk", system-ui, sans-serif;
+  --lz-font-body: "Work Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  font-family: var(--lz-font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--lz-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#lz-chatbot *,
+#lz-chatbot *::before,
+#lz-chatbot *::after {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   BULLE FLOTTANTE (état fermé)
+   ============================================================ */
+.lz-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  /* Cercle épuré. L'effet "conversation" est porté par la bulle
+     d'accroche (.lz-callout) qui apparaît à côté. */
+  border-radius: 50%;
+  background: var(--lz-color);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  box-shadow: var(--lz-shadow-md);
+  z-index: 999998;
+  transform: scale(0.9);
+  transition: transform 0.18s var(--lz-ease-out), box-shadow 0.18s var(--lz-ease-out);
+  animation: lz-bubble-in 0.55s var(--lz-ease-spring);
+}
+
+/* ---- Bulle d'accroche (callout) : petite bulle de conversation ---- */
+.lz-callout {
+  position: fixed;
+  right: 22px;
+  bottom: 96px; /* juste au-dessus du cercle (24 + 60 + marge) */
+  max-width: 230px;
+  background: #ffffff;
+  color: var(--lz-text);
+  font-family: var(--lz-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+  padding: 11px 34px 11px 14px;
+  border-radius: 16px;
+  box-shadow: var(--lz-shadow-md);
+  z-index: 999998;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 0.32s var(--lz-ease-out), transform 0.32s var(--lz-ease-spring);
+}
+
+.lz-callout.lz-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* petite queue de la bulle d'accroche, pointant vers le cercle */
+.lz-callout::after {
+  content: "";
+  position: absolute;
+  right: 26px;
+  bottom: -6px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-bottom-right-radius: 3px;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+/* bouton de fermeture discret de l'accroche */
+.lz-callout-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--lz-grey-400);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s var(--lz-ease-out), color 0.15s var(--lz-ease-out);
+}
+
+.lz-callout-close:hover {
+  background: var(--lz-bg-messages);
+  color: var(--lz-grey-500);
+}
+
+/* léger flottement de l'accroche pour attirer l'œil */
+.lz-callout.lz-show {
+  animation: lz-callout-bob 3.2s ease-in-out 0.5s infinite;
+}
+
+@keyframes lz-callout-bob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-3px) scale(1); }
+}
+
+/* Entrée de la bulle au chargement (une seule fois) */
+@keyframes lz-bubble-in {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(0.9); }
+}
+
+.lz-bubble:hover {
+  transform: scale(1);
+  box-shadow: var(--lz-shadow-pop);
+}
+
+.lz-bubble:active {
+  transform: scale(0.95);
+}
+
+.lz-bubble svg {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+}
+
+/* ---- Bulle avec mascotte : fond lavande, Shadow déborde par le haut ---- */
+.lz-bubble.lz-bubble-mascot {
+  background: var(--lz-lavender);
+  overflow: visible; /* laisse la mascotte sortir du cercle */
+}
+
+/* Wrapper de flottement : centré horizontalement, ancré en bas du cercle.
+   La mascotte (plus haute que la bulle) dépasse donc par le haut. */
+.lz-bubble-float {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 72px;   /* > bulle : Izy dépasse en haut et sur les côtés */
+  height: 56px;
+  pointer-events: none;
+  animation: lz-float 3s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+/* La tête d'Izy fait un petit "coucou" périodique (léger balancement) */
+.lz-bubble-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  transform-origin: 50% 95%;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(35, 49, 66, 0.25));
+  animation: lz-wave 5s ease-in-out infinite;
+}
+
+/* Au survol de la bulle : la mascotte sautille */
+.lz-bubble:hover .lz-bubble-float {
+  animation: lz-hop 0.55s var(--lz-ease-spring);
+}
+
+/* Flottement vertical doux et continu */
+@keyframes lz-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* Petit signe : la mascotte penche brièvement de gauche à droite */
+@keyframes lz-wave {
+  0%, 70%, 100% { transform: rotate(0deg); }
+  78%           { transform: rotate(-9deg); }
+  86%           { transform: rotate(6deg); }
+  94%           { transform: rotate(-3deg); }
+}
+
+/* Petit saut au survol */
+@keyframes lz-hop {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-10px) scale(1.06); }
+  70%  { transform: translateY(0) scale(0.98); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Animation pulse subtile (classe ajoutée en JS) */
+.lz-bubble.lz-pulse {
+  animation: lz-pulse-anim 1.4s var(--lz-ease-out);
+}
+
+@keyframes lz-pulse-anim {
+  0%   { box-shadow: var(--lz-shadow-md), 0 0 0 0 rgba(150, 153, 206, 0.5); }
+  70%  { box-shadow: var(--lz-shadow-md), 0 0 0 16px rgba(150, 153, 206, 0); }
+  100% { box-shadow: var(--lz-shadow-md), 0 0 0 0 rgba(150, 153, 206, 0); }
+}
+
+/* Badge rouge "1" (notification simulée) */
+.lz-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: var(--lz-radius-pill);
+  background: var(--lz-accent);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  display: none; /* affiché en JS après 8 s */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #ffffff;
+  animation: lz-badge-pop 0.3s var(--lz-ease-spring);
+}
+
+.lz-badge.lz-show {
+  display: flex;
+}
+
+@keyframes lz-badge-pop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.lz-bubble.lz-hidden {
+  display: none;
+}
+
+/* ============================================================
+   FENÊTRE DE CHAT
+   ============================================================ */
+.lz-window {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 372px;
+  height: 540px;
+  max-height: calc(100vh - 48px);
+  background: #ffffff;
+  border-radius: var(--lz-radius-xl);
+  box-shadow: var(--lz-shadow-pop);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999999;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.32s var(--lz-ease-out), transform 0.32s var(--lz-ease-out),
+    width 0.28s var(--lz-ease-out), height 0.28s var(--lz-ease-out);
+}
+
+.lz-window.lz-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Fenêtre agrandie (bouton "agrandir") */
+.lz-window.lz-expanded {
+  width: min(560px, calc(100vw - 48px));
+  height: min(760px, calc(100vh - 48px));
+}
+
+/* ---- Header ---- */
+.lz-header {
+  background: var(--lz-color);
+  color: #ffffff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.lz-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--lz-lavender);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--lz-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Izy entièrement visible : réduit sous 100% pour qu'il tienne DANS le cercle
+   (le masque rond ne rogne plus sa tête large), centré, et un peu vivant. */
+.lz-avatar-img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  object-position: center;
+  transform-origin: 50% 60%;
+  animation: lz-avatar-life 5s ease-in-out infinite;
+}
+
+/* Petit "coucou" périodique d'Izy dans le header (reste dans le cercle) */
+@keyframes lz-avatar-life {
+  0%, 60%, 100% { transform: translateY(0) rotate(0deg); }
+  68%           { transform: translateY(-1.5px) rotate(-7deg); }
+  78%           { transform: translateY(-1.5px) rotate(6deg); }
+  88%           { transform: translateY(0) rotate(-3deg); }
+}
+
+.lz-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lz-header-name {
+  font-family: var(--lz-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lz-header-status {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0.92;
+}
+
+.lz-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lz-success);
+  display: inline-block;
+  animation: lz-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes lz-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.lz-close,
+.lz-reset,
+.lz-expand {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  transition: background 0.15s var(--lz-ease-out);
+  flex-shrink: 0;
+}
+
+.lz-close:hover,
+.lz-reset:hover,
+.lz-expand:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Icônes des boutons réinitialiser / agrandir */
+.lz-reset svg,
+.lz-expand svg {
+  width: 17px;
+  height: 17px;
+  fill: #ffffff;
+  transition: transform 0.4s var(--lz-ease-out);
+}
+
+/* petite rotation de l'icône au survol (feedback "recharger") */
+.lz-reset:hover svg {
+  transform: rotate(-180deg);
+}
+
+/* ---- Zone des messages ---- */
+.lz-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--lz-bg-messages);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lz-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.lz-messages::-webkit-scrollbar-thumb {
+  background: var(--lz-grey-200);
+  border-radius: 3px;
+}
+
+.lz-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin-bottom: 8px;
+  animation: lz-msg-in 0.2s var(--lz-ease-out);
+}
+
+@keyframes lz-msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.lz-msg-bot {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.lz-msg-user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.lz-bubble-text {
+  padding: 10px 14px;
+  border-radius: var(--lz-radius-lg);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+.lz-msg-bot .lz-bubble-text {
+  background: #ffffff;
+  color: var(--lz-text);
+  border-bottom-left-radius: 4px; /* coin bas gauche carré */
+  box-shadow: var(--lz-shadow-sm);
+}
+
+.lz-msg-user .lz-bubble-text {
+  background: var(--lz-color);
+  color: #ffffff;
+  border-bottom-right-radius: 4px; /* coin bas droit carré */
+}
+
+.lz-time {
+  font-size: 11px;
+  color: var(--lz-grey-400);
+  margin-top: 3px;
+  padding: 0 4px;
+}
+
+/* ---- Indicateur de frappe (3 points) ---- */
+.lz-typing {
+  align-self: flex-start;
+  background: #ffffff;
+  border-radius: var(--lz-radius-lg);
+  border-bottom-left-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--lz-shadow-sm);
+  display: none;
+}
+
+.lz-typing.lz-show {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.lz-typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lz-lavender);
+  display: inline-block;
+  animation: lz-bounce 1.2s infinite ease-in-out;
+}
+.lz-typing span:nth-child(2) { animation-delay: 0.18s; }
+.lz-typing span:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes lz-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40%           { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ---- Chips de réponse rapide (pill, accent lavande) ---- */
+.lz-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 8px;
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.lz-chip {
+  background: #ffffff;
+  border: 1.5px solid var(--lz-lavender);
+  color: var(--lz-color);
+  border-radius: var(--lz-radius-pill);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--lz-font-body);
+  cursor: pointer;
+  transition: transform 0.12s var(--lz-ease-out), background 0.12s var(--lz-ease-out);
+  white-space: nowrap;
+}
+
+.lz-chip:hover {
+  transform: scale(1.05);
+  background: rgba(150, 153, 206, 0.12);
+}
+
+/* ---- Formulaire RDV inline (carte 12px) ---- */
+.lz-form {
+  background: #ffffff;
+  border-radius: var(--lz-radius-md);
+  padding: 16px;
+  box-shadow: var(--lz-shadow-sm);
+  align-self: flex-start;
+  width: 100%;
+  margin-bottom: 8px;
+  animation: lz-msg-in 0.2s var(--lz-ease-out);
+}
+
+.lz-form-field {
+  margin-bottom: 12px;
+}
+
+.lz-form-label {
+  display: block;
+  font-size: 11px;
+  color: var(--lz-grey-500);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.lz-form-field input,
+.lz-form-field select {
+  width: 100%;
+  border: 1px solid var(--lz-grey-200);
+  border-radius: var(--lz-radius-sm);
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: var(--lz-font-body);
+  color: var(--lz-text);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s var(--lz-ease-out);
+}
+
+.lz-form-field input:focus,
+.lz-form-field select:focus {
+  border-color: var(--lz-lavender);
+}
+
+/* Bouton de confirmation = CTA pill rouge (DS) */
+.lz-form-submit {
+  width: 100%;
+  background: var(--lz-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--lz-radius-pill);
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--lz-font-body);
+  cursor: pointer;
+  transition: background 0.18s var(--lz-ease-out), transform 0.12s var(--lz-ease-out);
+  margin-top: 4px;
+}
+
+.lz-form-submit:hover {
+  background: #E85A5A;
+}
+
+.lz-form-submit:active {
+  transform: scale(0.97);
+}
+
+.lz-form-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lz-form-error {
+  color: var(--lz-accent);
+  font-size: 11px;
+  margin-top: 4px;
+  display: none;
+}
+
+/* ---- Zone de saisie ---- */
+.lz-input-zone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #ffffff;
+  border-top: 1px solid var(--lz-grey-200);
+  flex-shrink: 0;
+}
+
+.lz-input {
+  flex: 1;
+  border: 1px solid var(--lz-grey-200);
+  border-radius: var(--lz-radius-pill);
+  padding: 11px 16px;
+  font-size: 14px;
+  font-family: var(--lz-font-body);
+  outline: none;
+  color: var(--lz-text);
+  transition: border-color 0.15s var(--lz-ease-out);
+}
+
+.lz-input::placeholder {
+  color: var(--lz-grey-400);
+}
+
+.lz-input:focus {
+  border-color: var(--lz-lavender);
+}
+
+/* Bouton envoi = CTA rouge (DS) */
+.lz-send {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--lz-accent);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.18s var(--lz-ease-out), transform 0.12s var(--lz-ease-out);
+}
+
+.lz-send:hover {
+  background: #E85A5A;
+}
+
+.lz-send:active {
+  transform: scale(0.95);
+}
+
+.lz-send svg {
+  width: 20px;
+  height: 20px;
+  fill: #ffffff;
+  transition: transform 0.2s var(--lz-ease-out);
+}
+
+.lz-send.lz-clicked svg {
+  transform: rotate(20deg) translateX(2px);
+}
+
+/* ============================================================
+   RESPONSIVE MOBILE (< 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .lz-window {
+    width: 100%;
+    height: 85vh;
+    max-height: 85vh;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .lz-bubble {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  /* Champs plus grands pour le tactile (évite le zoom iOS) */
+  .lz-form-field input,
+  .lz-form-field select {
+    padding: 12px 13px;
+    font-size: 16px;
+  }
+
+  .lz-input {
+    font-size: 16px;
+  }
+}
