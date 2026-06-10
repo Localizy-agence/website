@@ -32,14 +32,6 @@ export default function Hero() {
           </Button>
         </div>
 
-        <div className="hero-proof">
-          <div className="flex items-center gap-2">
-            <span className="star-fill text-lg tracking-wider">★★★★★</span>
-            <span>
-              <b>4,9/5</b> sur Google · <b>20+</b> entreprises accompagnées
-            </span>
-          </div>
-        </div>
       </div>
 
       <div className="hero-mascot">
