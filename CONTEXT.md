@@ -16,10 +16,11 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 
 ### Ce qui est en place
 - Homepage complète avec toutes les sections
+- Page Services complète avec navigation sticky tabs
 - Design system complet dans `globals.css`
 - Carousel avis Google (9 avis réels)
 - Section réalisations avec images clients
-- Section services (Sites web, SEO & GMB, SaaS/IA)
+- Chatbot Localizy intégré sur toutes les pages
 - Déploiement automatique sur push vers main
 
 ### Fichiers clés
@@ -27,8 +28,10 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 src/
 ├── app/
 │   ├── globals.css       # Design system complet
-│   ├── layout.tsx
-│   └── page.tsx
+│   ├── layout.tsx        # Intégration chatbot
+│   ├── page.tsx          # Homepage
+│   └── services/
+│       └── page.tsx      # Page Services (tabs sticky, 3 sections)
 ├── components/
 │   ├── Header.tsx
 │   ├── Footer.tsx
@@ -45,6 +48,12 @@ src/
 │       └── FinalCTA.tsx
 ├── lib/
 │   └── assets.ts
+public/
+├── chatbot/              # Widget chatbot Localizy
+│   ├── chatbot.js
+│   ├── chatbot.css
+│   ├── config.js         # ⚠️ Non commité (clés API)
+│   └── assets/
 .github/
 └── workflows/
     └── deploy.yml        # GitHub Actions auto-deploy
@@ -80,13 +89,16 @@ git add . && git commit -m "message" && git push
 - `README-DEPLOY.md` — Documentation technique déploiement
 
 ## Prochaines étapes
-- [ ] Finaliser le contenu des sections
+- [x] Page Services créée
+- [x] Chatbot intégré
 - [ ] Optimiser les images (< 100 Ko chacune)
 - [ ] Ajouter visuels LinkedIn
-- [ ] Créer les autres pages (Services, Portfolio, Contact, etc.)
+- [ ] Créer les autres pages (Portfolio, Contact, À propos, etc.)
 - [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
 
 ## Notes
 - "Lyon" a été remplacé par "Oise" partout
 - Les images réalisations sont dans `public/images/`
 - Le WordPress actuel reste sur localizy.fr jusqu'à validation du nouveau site
+- Coordonnées : contact@localizy.fr / 07 81 18 94 24
+- Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
