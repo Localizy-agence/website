@@ -19,6 +19,7 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 - Page Services complète avec navigation sticky tabs
 - Page À propos avec hero Izy, stats, valeurs, approche
 - Page Réalisations avec grille filtrable par catégorie
+- Formulaire de contact en modal (3 étapes, EmailJS)
 - Design system complet dans `globals.css`
 - Carousel avis Google (9 avis réels)
 - Section réalisations avec images clients
@@ -42,6 +43,9 @@ src/
 │   ├── Header.tsx
 │   ├── Footer.tsx
 │   ├── Button.tsx
+│   ├── ContactButton.tsx    # Bouton qui ouvre le modal contact
+│   ├── ContactModal.tsx     # Modal contact 3 étapes + EmailJS
+│   ├── ClientProviders.tsx  # Provider pour le modal
 │   ├── Underline.tsx
 │   └── sections/
 │       ├── Hero.tsx
@@ -99,10 +103,10 @@ git add . && git commit -m "message" && git push
 - [x] Chatbot intégré
 - [x] Page À propos créée
 - [x] Page Réalisations créée (grille filtrable avec placeholders)
+- [x] Formulaire de contact en modal (remplace page Contact)
 - [ ] Ajouter les vrais projets sur la page Réalisations
 - [ ] Optimiser les images (< 100 Ko chacune)
 - [ ] Ajouter visuels LinkedIn
-- [ ] Créer la page Contact
 - [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
 
 ## Notes
@@ -111,3 +115,4 @@ git add . && git commit -m "message" && git push
 - Le WordPress actuel reste sur localizy.fr jusqu'à validation du nouveau site
 - Coordonnées : contact@localizy.fr / 07 81 18 94 24
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
+- Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
