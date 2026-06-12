@@ -5,6 +5,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Button from "@/components/Button";
+import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 
 const categories = [
@@ -98,9 +99,9 @@ export default function RealisationsPage() {
             Sites web, stratégies SEO, outils sur-mesure — découvrez comment nous avons accompagné des entreprises locales dans leur croissance digitale.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button>
+            <ContactButton>
               Discuter de mon projet <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
             <Button variant="ghost">Voir nos services</Button>
           </div>
         </div>
@@ -267,10 +268,10 @@ export default function RealisationsPage() {
           </p>
 
           <div className="flex flex-wrap gap-3 mb-7">
-            <Button>
+            <ContactButton>
               Prendre rendez-vous <span className="arrow-anim">→</span>
-            </Button>
-            <Button variant="secondary">Nous écrire</Button>
+            </ContactButton>
+            <ContactButton variant="secondary">Nous écrire</ContactButton>
           </div>
 
           <div className="final-cta-contact">

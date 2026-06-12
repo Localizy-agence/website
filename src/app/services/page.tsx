@@ -5,6 +5,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Button from "@/components/Button";
+import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 
 const tabs = [
@@ -135,9 +136,9 @@ export default function ServicesPageV2() {
             Sites web qui convertissent. Visibilité locale qui attire. Outils qui automatisent.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button>
+            <ContactButton>
               Parler de mon projet <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
             <Button variant="ghost">Voir les réalisations</Button>
           </div>
         </div>
@@ -396,10 +397,10 @@ export default function ServicesPageV2() {
           </p>
 
           <div className="flex flex-wrap gap-3 mb-7">
-            <Button>
+            <ContactButton>
               Prendre rendez-vous <span className="arrow-anim">→</span>
-            </Button>
-            <Button variant="secondary">Nous écrire</Button>
+            </ContactButton>
+            <ContactButton variant="secondary">Nous écrire</ContactButton>
           </div>
 
           <div className="final-cta-contact">

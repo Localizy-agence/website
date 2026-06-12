@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Underline from "../Underline";
-import Button from "../Button";
+import ContactButton from "../ContactButton";
 
 const items = [
   {
@@ -51,9 +53,9 @@ export default function Pourquoi() {
       </div>
 
       <div className="flex justify-center mt-10">
-        <Button>
+        <ContactButton>
           Parlons de votre projet <span className="arrow-anim">→</span>
-        </Button>
+        </ContactButton>
       </div>
     </section>
   );

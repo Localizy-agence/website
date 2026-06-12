@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Button from "../Button";
+import ContactButton from "../ContactButton";
 
 export default function Hero() {
   return (
@@ -24,9 +27,9 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-wrap gap-3 items-center">
-          <Button>
+          <ContactButton>
             Parlons de votre projet <span className="arrow-anim">→</span>
-          </Button>
+          </ContactButton>
           <Button variant="ghost">
             Découvrir nos services <span className="arrow-anim">→</span>
           </Button>

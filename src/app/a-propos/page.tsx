@@ -4,6 +4,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Button from "@/components/Button";
+import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 
 const approachSteps = [
@@ -72,9 +73,9 @@ export default function AProposPage() {
             Sites web, SEO local, outils sur-mesure — le digital au service de votre croissance.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button>
+            <ContactButton>
               Parlons de votre projet <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
             <Button variant="ghost">Voir nos réalisations</Button>
           </div>
         </div>
@@ -311,9 +312,9 @@ export default function AProposPage() {
           </div>
 
           <div style={{ marginTop: "30px" }}>
-            <Button>
+            <ContactButton>
               Demander un RDV <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
           </div>
         </div>
       </section>
@@ -405,10 +406,10 @@ export default function AProposPage() {
           </p>
 
           <div className="flex flex-wrap gap-3 mb-7">
-            <Button>
+            <ContactButton>
               Prendre rendez-vous <span className="arrow-anim">→</span>
-            </Button>
-            <Button variant="secondary">Nous écrire</Button>
+            </ContactButton>
+            <ContactButton variant="secondary">Nous écrire</ContactButton>
           </div>
 
           <div className="final-cta-contact">

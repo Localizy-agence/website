@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import ClientProviders from "@/components/ClientProviders";
 
 export const metadata: Metadata = {
   title: "Localizy — Sites web & SEO local dans l'Oise",
@@ -22,7 +23,9 @@ export default function RootLayout({
         <link rel="stylesheet" href="/chatbot/chatbot.css" />
       </head>
       <body>
-        {children}
+        <ClientProviders>
+          {children}
+        </ClientProviders>
         <Script
           src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
           strategy="beforeInteractive"

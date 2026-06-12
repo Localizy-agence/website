@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Underline from "../Underline";
-import Button from "../Button";
+import ContactButton from "../ContactButton";
 
 export default function FinalCTA() {
   return (
@@ -17,10 +19,10 @@ export default function FinalCTA() {
         </p>
 
         <div className="flex flex-wrap gap-3 mb-7">
-          <Button>
+          <ContactButton>
             Prendre rendez-vous <span className="arrow-anim">→</span>
-          </Button>
-          <Button variant="secondary">Nous écrire</Button>
+          </ContactButton>
+          <ContactButton variant="secondary">Nous écrire</ContactButton>
         </div>
 
         <div className="final-cta-contact">
