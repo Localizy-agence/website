@@ -112,14 +112,26 @@ export default function ServicesPageV2() {
     <div className="max-w-[1280px] mx-auto" style={{ padding: "16px 28px 80px" }}>
       <Header />
 
-      {/* Hero - Version compacte avec illustration */}
-      <section className="services-hero-v2">
-        <div className="services-hero-v2-content">
+      {/* Hero - texte à gauche, Izy à droite */}
+      <section style={{
+        marginTop: "32px",
+        padding: "56px",
+        borderRadius: "24px",
+        backgroundColor: "#F5F5FA",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "40px",
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        {/* Contenu texte à gauche */}
+        <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
           <div className="section-eyebrow">· Nos prestations ·</div>
-          <h1 className="services-hero-v2-headline">
+          <h1 className="about-hero-headline" style={{ marginTop: "16px" }}>
             Tout ce qu&apos;il faut pour <Underline>exister</Underline> — et gagner — en ligne<span className="hero-accent">.</span>
           </h1>
-          <p className="services-hero-v2-lead">
+          <p className="about-hero-lead" style={{ marginTop: "20px", maxWidth: "500px" }}>
             Sites web qui convertissent. Visibilité locale qui attire. Outils qui automatisent.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
@@ -129,13 +141,42 @@ export default function ServicesPageV2() {
             <Button variant="ghost">Voir les réalisations</Button>
           </div>
         </div>
-        <div className="services-hero-v2-visual">
+
+        {/* Zone Izy + sticker à droite */}
+        <div style={{
+          position: "relative",
+          width: "380px",
+          height: "400px",
+          flexShrink: 0
+        }}>
+          {/* Sticker fusée à gauche d'Izy */}
           <Image
-            src="/mascots/shadow-hello.webp"
-            alt="Shadow"
-            width={320}
-            height={380}
-            className="services-hero-v2-mascot"
+            src="/stickers/fusee.svg"
+            alt=""
+            width={140}
+            height={140}
+            style={{
+              position: "absolute",
+              top: "10%",
+              left: "-30%",
+              transform: "rotate(15deg)",
+              opacity: 0.6
+            }}
+          />
+
+          {/* Izy mascotte */}
+          <Image
+            src="/mascots/Izy_Salut.webp"
+            alt="Izy"
+            width={340}
+            height={400}
+            style={{
+              position: "absolute",
+              bottom: "-50px",
+              left: "50%",
+              transform: "translateX(-50%) rotate(3deg)",
+              zIndex: 1
+            }}
           />
         </div>
       </section>

@@ -17,6 +17,8 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 ### Ce qui est en place
 - Homepage complète avec toutes les sections
 - Page Services complète avec navigation sticky tabs
+- Page À propos avec hero Izy, stats, valeurs, approche
+- Page Réalisations avec grille filtrable par catégorie
 - Design system complet dans `globals.css`
 - Carousel avis Google (9 avis réels)
 - Section réalisations avec images clients
@@ -30,8 +32,12 @@ src/
 │   ├── globals.css       # Design system complet
 │   ├── layout.tsx        # Intégration chatbot
 │   ├── page.tsx          # Homepage
-│   └── services/
-│       └── page.tsx      # Page Services (tabs sticky, 3 sections)
+│   ├── services/
+│   │   └── page.tsx      # Page Services (tabs sticky, 3 sections)
+│   ├── a-propos/
+│   │   └── page.tsx      # Page À propos (hero Izy, stats, valeurs)
+│   └── realisations/
+│       └── page.tsx      # Page Réalisations (grille filtrable)
 ├── components/
 │   ├── Header.tsx
 │   ├── Footer.tsx
@@ -91,9 +97,12 @@ git add . && git commit -m "message" && git push
 ## Prochaines étapes
 - [x] Page Services créée
 - [x] Chatbot intégré
+- [x] Page À propos créée
+- [x] Page Réalisations créée (grille filtrable avec placeholders)
+- [ ] Ajouter les vrais projets sur la page Réalisations
 - [ ] Optimiser les images (< 100 Ko chacune)
 - [ ] Ajouter visuels LinkedIn
-- [ ] Créer les autres pages (Portfolio, Contact, À propos, etc.)
+- [ ] Créer la page Contact
 - [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
 
 ## Notes
