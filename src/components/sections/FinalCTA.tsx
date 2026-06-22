@@ -45,7 +45,7 @@ export default function FinalCTA() {
         src="/mascots/shadow-telephone.webp"
         alt="Shadow au téléphone"
         width={360}
-        height={400}
+        height={524}
         className="final-cta-mascot hidden lg:block self-end justify-self-end"
       />
     </section>

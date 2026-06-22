@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Accueil" },
@@ -13,7 +13,10 @@ const links = [
 ];
 
 export default function Header() {
-  const [active, setActive] = useState("Accueil");
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header className="header">
@@ -32,8 +35,7 @@ export default function Header() {
           <Link
             key={l.label}
             href={l.href}
-            onClick={() => setActive(l.label)}
-            className={`header-nav-link ${active === l.label ? "active" : ""}`}
+            className={`header-nav-link ${isActive(l.href) ? "active" : ""}`}
           >
             {l.label}
           </Link>

@@ -292,7 +292,7 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
                 justifyContent: "center",
               }}
             >
-              <Image src="/stickers/coeur.svg" alt="" width={24} height={24} />
+              <Image src="/stickers/coeur.svg" alt="" width={24} height={27} />
             </div>
             <div>
               <h2

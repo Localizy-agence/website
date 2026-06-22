@@ -41,7 +41,7 @@ export default function Hero() {
         <Image
           src="/mascots/shadow-hello.webp"
           alt="Shadow, la mascotte Localizy"
-          width={400}
+          width={330}
           height={480}
           className="hero-mascot-img"
           priority
@@ -52,7 +52,7 @@ export default function Hero() {
           style={{ top: 32, right: 0, width: 220, transform: "rotate(3deg)" }}
         >
           <span className="hero-float-card-icon">
-            <Image src="/stickers/cible.svg" alt="" width={28} height={28} />
+            <Image src="/stickers/cible.svg" alt="" width={28} height={30} />
           </span>
           <div>
             <div className="hero-float-card-title">+ de visibilité locale</div>
@@ -64,7 +64,7 @@ export default function Hero() {
           className="hero-float-card"
           style={{ bottom: 24, left: 0, width: 260, transform: "rotate(-3deg)" }}
         >
-          <Image src="/stickers/ordinateur.svg" alt="" width={36} height={36} />
+          <Image src="/stickers/ordinateur.svg" alt="" width={36} height={27} />
           <div>
             <div className="hero-float-card-title">Site livré en 3 sem.</div>
             <div className="hero-float-card-sub">Design + dev + mise en ligne</div>
@@ -75,7 +75,7 @@ export default function Hero() {
           src="/stickers/etoiles.svg"
           alt=""
           width={64}
-          height={64}
+          height={29}
           className="absolute top-0 left-5"
           style={{ transform: "rotate(-15deg)", opacity: 0.95 }}
         />

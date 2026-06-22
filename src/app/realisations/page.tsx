@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
+import RealisationCard, { type Project } from "@/components/RealisationCard";
 
 const categories = [
   { id: "all", label: "Tous" },
@@ -15,54 +16,71 @@ const categories = [
   { id: "saas", label: "SaaS" },
 ];
 
-const projects = [
+const projects: Project[] = [
   {
     id: 1,
-    name: "Garage Martin",
-    category: "site-web",
+    name: "Espace Modulaire France",
     type: "Site vitrine",
-    result: "+180% de contacts",
+    result: "+48% de traffic",
     sticker: "ordinateur",
+    categories: ["site-web", "seo"],
+    url: "https://espacemodulaire.com/",
+    screenshot: "/images/espacemodulaire.png",
   },
   {
     id: 2,
-    name: "Pizzeria Bella",
-    category: "seo",
-    type: "SEO local & GMB",
-    result: "Top 3 Google Maps",
-    sticker: "cible",
+    name: "KDI Overseas",
+    type: "Site vitrine",
+    result: "Création d'entreprise réussie",
+    sticker: "ordinateur",
+    categories: ["site-web"],
+    url: "https://kdiol.com/",
+    screenshot: "/images/kdioverseas.png",
   },
   {
     id: 3,
-    name: "Cabinet Dupont",
-    category: "site-web",
+    name: "Mon Projet Rentable",
     type: "Site vitrine",
-    result: "+95% de trafic",
     sticker: "ordinateur",
+    categories: ["site-web"],
+    url: "https://monprojetrentable.com/",
+    screenshot: "/images/monprojetrentable.png",
   },
   {
     id: 4,
-    name: "Plomberie Express",
-    category: "seo",
-    type: "SEO local & GMB",
-    result: "12 avis 5 étoiles/mois",
-    sticker: "cible",
+    name: "Ardila",
+    type: "Générateur d'articles SEO",
+    result: "-60% de temps passé sur la com'",
+    sticker: "fiole",
+    categories: ["saas"],
   },
   {
     id: 5,
-    name: "Agence Immo Plus",
-    category: "saas",
-    type: "CRM sur-mesure",
-    result: "-40% temps admin",
-    sticker: "fiole",
+    name: "Auberge du Maroc",
+    type: "Site restaurant",
+    result: "+20% de commandes",
+    sticker: "ordinateur",
+    categories: ["site-web"],
+    url: "https://aubergedumaroc.com/",
+    screenshot: "/images/aubergedumaroc.png",
   },
   {
     id: 6,
-    name: "Coach Sportif 60",
-    category: "site-web",
-    type: "Site + booking",
-    result: "+250% réservations",
+    name: "Opticien Nouveau Regard",
+    type: "Site + prise de RDV",
+    result: "+15% de RDV en boutique",
     sticker: "ordinateur",
+    categories: ["site-web"],
+    url: "https://opticiennouveauregard.fr/",
+    screenshot: "/images/opticiennouveauregard.png",
+  },
+  {
+    id: 7,
+    name: "Débarras Grand Paris",
+    type: "Optimisation GMB",
+    result: "Top 5 Google Maps",
+    sticker: "cible",
+    categories: ["site-web", "seo"],
   },
 ];
 
@@ -71,7 +89,7 @@ export default function RealisationsPage() {
 
   const filteredProjects = activeFilter === "all"
     ? projects
-    : projects.filter((p) => p.category === activeFilter);
+    : projects.filter((p) => p.categories.includes(activeFilter));
   return (
     <div className="max-w-[1280px] mx-auto" style={{ padding: "16px 28px 80px" }}>
       <Header />
@@ -118,7 +136,7 @@ export default function RealisationsPage() {
             src="/stickers/etoiles.svg"
             alt=""
             width={150}
-            height={150}
+            height={67}
             style={{
               position: "absolute",
               top: "14%",
@@ -133,7 +151,8 @@ export default function RealisationsPage() {
             src="/mascots/Izy_Regard-Gauche.webp"
             alt="Izy"
             width={340}
-            height={400}
+            height={340}
+            priority
             style={{
               position: "absolute",
               bottom: "-50px",
@@ -174,84 +193,8 @@ export default function RealisationsPage() {
         gridTemplateColumns: "repeat(2, 1fr)",
         gap: "24px"
       }}>
-        {filteredProjects.map((project) => (
-          <div key={project.id} style={{
-            backgroundColor: "#FFFFFF",
-            borderRadius: "16px",
-            overflow: "hidden",
-            border: "1px solid #E8E8F0",
-            transition: "transform 0.2s ease, box-shadow 0.2s ease",
-            cursor: "pointer"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-4px)";
-            e.currentTarget.style.boxShadow = "0 12px 32px rgba(35, 49, 66, 0.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-          >
-            {/* Image placeholder */}
-            <div style={{
-              aspectRatio: "16/10",
-              backgroundColor: "#F5F5FA",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative"
-            }}>
-              <span style={{ color: "#9C9CB4", fontSize: "14px" }}>Capture du site</span>
-              {/* Badge catégorie */}
-              <div style={{
-                position: "absolute",
-                top: "16px",
-                left: "16px",
-                backgroundColor: "#FFFFFF",
-                borderRadius: "8px",
-                padding: "6px 10px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}>
-                <Image
-                  src={`/stickers/${project.sticker}.svg`}
-                  alt=""
-                  width={16}
-                  height={16}
-                />
-                <span style={{
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "#233142"
-                }}>{project.type}</span>
-              </div>
-            </div>
-            {/* Contenu */}
-            <div style={{ padding: "20px 24px" }}>
-              <h3 style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                fontSize: "18px",
-                color: "#233142",
-                marginBottom: "8px"
-              }}>{project.name}</h3>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px"
-              }}>
-                <div style={{
-                  backgroundColor: "#E8F5E9",
-                  color: "#2E7D32",
-                  padding: "4px 10px",
-                  borderRadius: "6px",
-                  fontSize: "13px",
-                  fontWeight: 600
-                }}>{project.result}</div>
-              </div>
-            </div>
-          </div>
+        {filteredProjects.map((project, index) => (
+          <RealisationCard key={project.id} project={project} priority={index === 0} />
         ))}
       </section>
 
@@ -294,7 +237,7 @@ export default function RealisationsPage() {
           src="/mascots/shadow-telephone.webp"
           alt="Shadow au téléphone"
           width={360}
-          height={400}
+          height={524}
           className="final-cta-mascot hidden lg:block self-end justify-self-end"
         />
       </section>

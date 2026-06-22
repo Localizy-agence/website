@@ -92,7 +92,7 @@ export default function AProposPage() {
             src="/stickers/coeur.svg"
             alt=""
             width={120}
-            height={120}
+            height={134}
             style={{
               position: "absolute",
               top: "2%",
@@ -107,7 +107,8 @@ export default function AProposPage() {
             src="/mascots/Izy_Heureux.webp"
             alt="Izy"
             width={340}
-            height={400}
+            height={340}
+            priority
             style={{
               position: "absolute",
               bottom: "-50px",
@@ -229,7 +230,7 @@ export default function AProposPage() {
             src="/mascots/shadow-artiste.webp"
             alt="Izy"
             width={420}
-            height={500}
+            height={611}
             style={{
               display: "block"
             }}
@@ -291,6 +292,7 @@ export default function AProposPage() {
                     alt=""
                     width={28}
                     height={28}
+                    style={{ width: "28px", height: "28px", objectFit: "contain" }}
                   />
                 </div>
                 <div>
@@ -432,7 +434,7 @@ export default function AProposPage() {
           src="/mascots/shadow-telephone.webp"
           alt="Shadow au téléphone"
           width={360}
-          height={400}
+          height={524}
           className="final-cta-mascot hidden lg:block self-end justify-self-end"
         />
       </section>

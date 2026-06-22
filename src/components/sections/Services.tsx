@@ -24,6 +24,7 @@ function ServiceCard({ sticker, pill, title, body }: ServiceCardProps) {
             width={80}
             height={80}
             className="object-contain"
+            style={{ width: "80px", height: "80px" }}
           />
         </div>
       </div>

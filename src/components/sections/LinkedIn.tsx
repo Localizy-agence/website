@@ -70,7 +70,7 @@ export default function LinkedIn() {
                 width={80}
                 height={80}
                 className="absolute -bottom-2.5 -right-2.5 opacity-35"
-                style={{ transform: "rotate(-12deg)" }}
+                style={{ transform: "rotate(-12deg)", width: "80px", height: "80px", objectFit: "contain" }}
               />
             </div>
             <div className="linkedin-card-footer">

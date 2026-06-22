@@ -1238,6 +1238,113 @@ button {
   filter: drop-shadow(0 24px 32px rgba(0,0,0,0.4));
 }
 
+/* ---------- Realisation cards (preview iframe) --------------------------- */
+
+.realisation-card {
+  background: var(--lz-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #E8E8F0;
+  cursor: pointer;
+  transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+}
+
+/* Scale uniquement sur les périphériques avec vrai hover (desktop). */
+@media (hover: hover) {
+  .realisation-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 32px rgba(35, 49, 66, 0.12);
+  }
+}
+
+.realisation-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #F5F5FA;
+  overflow: hidden;
+}
+
+.realisation-card-screenshot {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.realisation-card-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9C9CB4;
+  font-size: 14px;
+}
+
+.realisation-card-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  background: #F5F5FA;
+  /* Rendue en taille desktop puis réduite via transform: scale() (inline). */
+  transform-origin: top left;
+  opacity: 0;
+  pointer-events: none;
+  cursor: grab;
+  transition: opacity 260ms var(--ease-out);
+}
+
+.realisation-card-iframe.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.realisation-card-iframe.is-active:active {
+  cursor: grabbing;
+}
+
+.realisation-card-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--lz-white);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.realisation-card-badge-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #233142;
+}
+
+.realisation-card-body {
+  padding: 20px 24px;
+}
+
+.realisation-card-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  color: #233142;
+  margin-bottom: 8px;
+}
+
+.realisation-card-result {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 /* ---------- Utilities ---------------------------------------------------- */
 
 .underline-highlight {

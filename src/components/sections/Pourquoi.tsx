@@ -44,6 +44,7 @@ export default function Pourquoi() {
                 alt=""
                 width={52}
                 height={52}
+                style={{ width: "52px", height: "52px", objectFit: "contain" }}
               />
             </div>
             <h3 className="pourquoi-title">{it.title}</h3>

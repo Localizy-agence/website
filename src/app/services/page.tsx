@@ -155,7 +155,7 @@ export default function ServicesPageV2() {
             src="/stickers/fusee.svg"
             alt=""
             width={140}
-            height={140}
+            height={169}
             style={{
               position: "absolute",
               top: "10%",
@@ -170,7 +170,8 @@ export default function ServicesPageV2() {
             src="/mascots/Izy_Salut.webp"
             alt="Izy"
             width={340}
-            height={400}
+            height={340}
+            priority
             style={{
               position: "absolute",
               bottom: "-50px",
@@ -197,6 +198,7 @@ export default function ServicesPageV2() {
                 width={20}
                 height={20}
                 className="services-tab-v2-icon"
+                style={{ width: "20px", height: "20px", objectFit: "contain" }}
               />
               {tab.label}
             </button>
@@ -299,7 +301,7 @@ export default function ServicesPageV2() {
             </div>
 
             <div className="services-resultat-v2">
-              <Image src="/stickers/fusee.svg" alt="" width={32} height={32} />
+              <Image src="/stickers/fusee.svg" alt="" width={32} height={39} />
               <div>
                 <div className="services-resultat-v2-label">Résultat type</div>
                 <div className="services-resultat-v2-value">+40% de clics organiques en 3 mois</div>
@@ -339,6 +341,7 @@ export default function ServicesPageV2() {
                   alt=""
                   width={48}
                   height={48}
+                  style={{ width: "48px", height: "48px", objectFit: "contain" }}
                 />
                 <h3 className="services-saas-card-v2-title">{product.title}</h3>
               </div>
@@ -375,6 +378,7 @@ export default function ServicesPageV2() {
                   alt=""
                   width={52}
                   height={52}
+                  style={{ width: "52px", height: "52px", objectFit: "contain" }}
                 />
               </div>
               <h3 className="pourquoi-title">{item.title}</h3>
@@ -423,7 +427,7 @@ export default function ServicesPageV2() {
           src="/mascots/shadow-telephone.webp"
           alt="Shadow au téléphone"
           width={360}
-          height={400}
+          height={524}
           className="final-cta-mascot hidden lg:block self-end justify-self-end"
         />
       </section>

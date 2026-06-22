@@ -42,7 +42,7 @@ export default function Footer() {
             src="/logo/localizy-logo-4.png"
             alt="Localizy"
             width={140}
-            height={30}
+            height={29}
             className="object-contain"
           />
           <p className="footer-tagline">
