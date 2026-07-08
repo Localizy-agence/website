@@ -15,14 +15,15 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 - Déploiement automatique via GitHub Actions + FTP
 
 ### Ce qui est en place
-- Homepage complète avec toutes les sections
+- Homepage complète avec toutes les sections + **responsive mobile** (menu hamburger, paddings/tailles adaptés)
 - Page Services complète avec navigation sticky tabs
-- Page À propos avec hero Izy, stats, valeurs, approche
-- Page Réalisations avec grille filtrable par catégorie
+- Page À propos avec hero Izy, stats, valeurs, approche (+ photos équipe & bureau)
+- Page Réalisations avec grille filtrable + cartes interactives (scroll molette sur captures, visuel fixe, carte de marque sans visuel)
+- Page Mentions légales (placeholder à remplir)
 - Formulaire de contact en modal (3 étapes, EmailJS)
-- Design system complet dans `globals.css`
+- Design system complet dans `globals.css` (+ bloc `@media (max-width:767px)` mobile en fin de fichier)
+- Navigation & boutons tous reliés (pages ou modal contact)
 - Carousel avis Google (9 avis réels)
-- Section réalisations avec images clients
 - Chatbot Localizy intégré sur toutes les pages
 - Déploiement automatique sur push vers main
 
@@ -37,12 +38,14 @@ src/
 │   │   └── page.tsx      # Page Services (tabs sticky, 3 sections)
 │   ├── a-propos/
 │   │   └── page.tsx      # Page À propos (hero Izy, stats, valeurs)
-│   └── realisations/
-│       └── page.tsx      # Page Réalisations (grille filtrable)
+│   ├── realisations/
+│   │   └── page.tsx      # Page Réalisations (grille filtrable)
+│   └── mentions-legales/
+│       └── page.tsx      # Mentions légales (placeholder à remplir)
 ├── components/
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   ├── Button.tsx
+│   ├── Header.tsx           # Nav + menu hamburger mobile
+│   ├── Footer.tsx           # Client (lien Contact = modal)
+│   ├── RealisationCard.tsx  # 3 modes: scroll molette / visuel fixe / sans visuel
 │   ├── ContactButton.tsx    # Bouton qui ouvre le modal contact
 │   ├── ContactModal.tsx     # Modal contact 3 étapes + EmailJS
 │   ├── ClientProviders.tsx  # Provider pour le modal
@@ -102,17 +105,28 @@ git add . && git commit -m "message" && git push
 - [x] Page Services créée
 - [x] Chatbot intégré
 - [x] Page À propos créée
-- [x] Page Réalisations créée (grille filtrable avec placeholders)
+- [x] Page Réalisations créée (grille filtrable + cartes interactives)
 - [x] Formulaire de contact en modal (remplace page Contact)
-- [ ] Ajouter les vrais projets sur la page Réalisations
-- [ ] Optimiser les images (< 100 Ko chacune)
+- [x] Navigation & boutons reliés aux pages / modal
+- [x] Responsive mobile page d'accueil (menu hamburger inclus)
+- [x] Images optimisées webp (equipe, bureau, ardila_seogenerator < 100 Ko)
+- [ ] **Responsive mobile des autres pages** (Services, À propos, Réalisations — layouts `flexDirection:"row"` + zones Izy largeur fixe à replier ; leur appliquer aussi `.page-shell`)
+- [ ] Remplir la page Mentions légales (infos client)
 - [ ] Ajouter visuels LinkedIn
+- [ ] Blog (reporté)
 - [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
 
 ## Notes
 - "Lyon" a été remplacé par "Oise" partout
-- Les images réalisations sont dans `public/images/`
+- Les images réalisations sont dans `public/images/` (webp optimisés < 100 Ko)
 - Le WordPress actuel reste sur localizy.fr jusqu'à validation du nouveau site
-- Coordonnées : contact@localizy.fr / 07 81 18 94 24
+- Coordonnées : contact@localizy.fr / 07 81 18 94 24 — note Google réelle : 5/5
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
+
+### Dév mobile / CSS (⚠️ important)
+- Site **desktop-first**. Corrections responsive dans un bloc `@media (max-width:767px)` **en fin** de `globals.css` (doit rester en fin : les règles custom sont non-layered, la dernière l'emporte à spécificité égale).
+- Conteneur de page = classe `.page-shell` (padding responsive). La home l'utilise ; les autres pages ont encore un padding inline à migrer.
+- Pour screenshot mobile fidèle : **émulation CDP** (`Emulation.setDeviceMetricsOverride`), pas `chrome --window-size` (n'applique pas le meta viewport → faux débordement).
+- Turbopack sert parfois du **CSS périmé** en dev : ne pas `build` pendant que `dev` tourne ; redémarrer avec `rm -rf .next`.
+- Push GitHub avec le compte **`Localizy-agence`** (pas `Rickko18`).
