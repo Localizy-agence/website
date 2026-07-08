@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Button from "@/components/Button";
 import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 import RealisationCard, { type Project } from "@/components/RealisationCard";
@@ -53,6 +53,8 @@ const projects: Project[] = [
     result: "-60% de temps passé sur la com'",
     sticker: "fiole",
     categories: ["saas"],
+    screenshot: "/images/ardila_seogenerator.webp",
+    fixed: true,
   },
   {
     id: 5,
@@ -120,7 +122,7 @@ export default function RealisationsPage() {
             <ContactButton>
               Discuter de mon projet <span className="arrow-anim">→</span>
             </ContactButton>
-            <Button variant="ghost">Voir nos services</Button>
+            <Link href="/services" className="btn btn-ghost">Voir nos services</Link>
           </div>
         </div>
 

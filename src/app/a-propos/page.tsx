@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Button from "@/components/Button";
 import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 
@@ -76,7 +76,7 @@ export default function AProposPage() {
             <ContactButton>
               Parlons de votre projet <span className="arrow-anim">→</span>
             </ContactButton>
-            <Button variant="ghost">Voir nos réalisations</Button>
+            <Link href="/realisations" className="btn btn-ghost">Voir nos réalisations</Link>
           </div>
         </div>
 
@@ -154,26 +154,32 @@ export default function AProposPage() {
             marginTop: "32px"
           }}>
             <div style={{
+              position: "relative",
               aspectRatio: "4/3",
-              backgroundColor: "#F5F5FA",
               borderRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "2px dashed #C8C8DA"
+              overflow: "hidden"
             }}>
-              <span style={{ color: "#9C9CB4", fontSize: "13px" }}>Photo équipe</span>
+              <Image
+                src="/images/equipe.webp"
+                alt="L'équipe Localizy"
+                fill
+                sizes="(max-width: 768px) 50vw, 300px"
+                style={{ objectFit: "cover" }}
+              />
             </div>
             <div style={{
+              position: "relative",
               aspectRatio: "4/3",
-              backgroundColor: "#F5F5FA",
               borderRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "2px dashed #C8C8DA"
+              overflow: "hidden"
             }}>
-              <span style={{ color: "#9C9CB4", fontSize: "13px" }}>Photo bureau</span>
+              <Image
+                src="/images/bureau.webp"
+                alt="Le bureau Localizy"
+                fill
+                sizes="(max-width: 768px) 50vw, 300px"
+                style={{ objectFit: "cover" }}
+              />
             </div>
           </div>
         </div>

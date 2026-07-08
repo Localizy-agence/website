@@ -12,17 +12,12 @@ export type Project = {
   categories: string[];
   url?: string;
   screenshot?: string;
+  // Visuel affiché tel quel (pas de défilement à la molette) : produit, outil…
+  fixed?: boolean;
 };
 
-// Si l'iframe n'a pas signalé son chargement dans ce délai, on retombe
-// sur la screenshot (filet de sécurité pour les sites lents / bloqués).
-const IFRAME_TIMEOUT_MS = 5000;
-
-// On rend l'iframe à une taille « desktop » (1280×800 = ratio 16/10,
-// identique à la card) puis on la met à l'échelle pour la faire tenir
-// dans le cadre. Sans ça, l'iframe étroite déclencherait la version mobile.
-const DESKTOP_WIDTH = 1280;
-const DESKTOP_HEIGHT = 800;
+// Sensibilité de la molette : % de la capture parcouru par « cran » (~100px).
+const WHEEL_SPEED = 0.12;
 
 export default function RealisationCard({
   project,
@@ -31,87 +26,80 @@ export default function RealisationCard({
   project: Project;
   priority?: boolean;
 }) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [iframeReady, setIframeReady] = useState(false);
-  const [iframeFailed, setIframeFailed] = useState(false);
-  const [scale, setScale] = useState(0.5);
+  const hasVisual = Boolean(project.screenshot);
+  const scrollable = hasVisual && !project.fixed;
+
+  // La capture « full page » très haute défile de haut (0%) en bas (100%) à la
+  // molette tant qu'on n'est pas en bout de course ; aux extrémités, la page
+  // reprend son défilement naturel.
+  const [posY, setPosY] = useState(0);
+  const posRef = useRef(0);
   const mediaRef = useRef<HTMLDivElement>(null);
 
-  // Détection mobile (< 768px) : pas d'iframe, pas d'interaction hover.
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  // Facteur d'échelle = largeur réelle de la card / largeur desktop virtuelle.
   useEffect(() => {
     const el = mediaRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      setScale(el.clientWidth / DESKTOP_WIDTH);
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    if (!el || !scrollable) return;
 
-  const canIframe = Boolean(project.url) && !isMobile && !iframeFailed;
-  // On monte l'iframe au premier hover puis on la garde montée une fois
-  // chargée (évite de recharger le site à chaque survol).
-  const mountIframe = canIframe && (isHovered || iframeReady);
+    const onWheel = (e: WheelEvent) => {
+      const next = Math.min(100, Math.max(0, posRef.current + e.deltaY * WHEEL_SPEED));
+      if (next !== posRef.current) {
+        e.preventDefault();
+        posRef.current = next;
+        setPosY(next);
+      }
+    };
 
-  // Filet de sécurité : si l'onLoad/onError ne se déclenche jamais.
-  useEffect(() => {
-    if (!mountIframe || iframeReady || iframeFailed) return;
-    const t = setTimeout(() => setIframeFailed(true), IFRAME_TIMEOUT_MS);
-    return () => clearTimeout(t);
-  }, [mountIframe, iframeReady, iframeFailed]);
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [scrollable]);
 
-  const handleLoad = () => setIframeReady(true);
-  const handleError = () => setIframeFailed(true);
+  const resetScroll = () => {
+    posRef.current = 0;
+    setPosY(0);
+  };
 
-  const showIframe = mountIframe && iframeReady && isHovered;
+  // Carte sans visuel (ex : SEO & GMB) : structure différente des cartes avec
+  // capture — une carte de marque pleine, sans zone média.
+  if (!hasVisual) {
+    return (
+      <div className="realisation-card realisation-card--novisual">
+        <div className="realisation-card-novisual-tile">
+          <Image
+            src={`/stickers/${project.sticker}.svg`}
+            alt=""
+            width={30}
+            height={30}
+            style={{ width: "30px", height: "30px", objectFit: "contain" }}
+          />
+        </div>
+
+        <div className="realisation-card-novisual-foot">
+          <span className="realisation-card-novisual-cat">{project.type}</span>
+          <h3 className="realisation-card-novisual-name">{project.name}</h3>
+          {project.result ? (
+            <div className="realisation-card-novisual-result">{project.result}</div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="realisation-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="realisation-card-media" ref={mediaRef}>
-        {project.screenshot ? (
-          <Image
-            src={project.screenshot}
-            alt={`Aperçu du site ${project.name}`}
-            fill
-            sizes="(max-width: 768px) 100vw, 600px"
-            priority={priority}
-            className="realisation-card-screenshot"
-          />
-        ) : (
-          <span className="realisation-card-placeholder">Capture du site</span>
-        )}
-
-        {mountIframe && (
-          <iframe
-            src={project.url}
-            title={`Aperçu interactif du site ${project.name}`}
-            loading="lazy"
-            onLoad={handleLoad}
-            onError={handleError}
-            className={`realisation-card-iframe ${showIframe ? "is-active" : ""}`}
-            style={{
-              width: `${DESKTOP_WIDTH}px`,
-              height: `${DESKTOP_HEIGHT}px`,
-              transform: `scale(${scale})`,
-            }}
-            // Limite ce que le site embarqué peut faire dans notre page.
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-          />
-        )}
+    <div className="realisation-card">
+      <div
+        className="realisation-card-media"
+        ref={mediaRef}
+        onMouseLeave={scrollable ? resetScroll : undefined}
+      >
+        <Image
+          src={project.screenshot as string}
+          alt={`Aperçu du site ${project.name}`}
+          fill
+          sizes="(max-width: 768px) 100vw, 600px"
+          priority={priority}
+          className={`realisation-card-screenshot ${project.fixed ? "realisation-card-screenshot--fixed" : ""}`}
+          style={scrollable ? { objectPosition: `center ${posY}%` } : undefined}
+        />
 
         {/* Badge catégorie */}
         <div className="realisation-card-badge">

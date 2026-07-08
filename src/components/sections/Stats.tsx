@@ -1,6 +1,6 @@
 const stats = [
   { value: "20", unit: "+", label: "entreprises accompagnées" },
-  { value: "4,9", unit: "/5", label: "satisfaction Google" },
+  { value: "5", unit: "/5", label: "satisfaction Google" },
   { value: "100", unit: "%", label: "des projets livrés à temps" },
   { value: "3", unit: " sem", label: "pour la livraison moyenne" },
 ];

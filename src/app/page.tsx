@@ -11,10 +11,7 @@ import FinalCTA from "@/components/sections/FinalCTA";
 
 export default function Home() {
   return (
-    <div
-      className="max-w-[1280px] mx-auto"
-      style={{ padding: "16px 28px 80px" }}
-    >
+    <div className="page-shell">
       <Header />
       <Hero />
       <Reviews />

@@ -391,6 +391,94 @@ button {
   background: var(--lz-red);
 }
 
+/* ---------- Header mobile (hamburger + menu déroulant) ------------------- */
+
+.header-burger {
+  /* Masqué par défaut (desktop) ; affiché en mobile via media query.
+     On ne s'appuie pas sur les classes Tailwind hidden/md:* car le
+     display des classes custom (non-layered) les emporte sur les utilities. */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: var(--lz-red-bright);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.header-burger-icon {
+  position: relative;
+  width: 18px;
+  height: 14px;
+}
+.header-burger-icon span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--lz-white);
+  transition: transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out), top var(--dur-base) var(--ease-out);
+}
+.header-burger-icon span:nth-child(1) { top: 0; }
+.header-burger-icon span:nth-child(2) { top: 6px; }
+.header-burger-icon span:nth-child(3) { top: 12px; }
+.header-burger-icon.is-open span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+.header-burger-icon.is-open span:nth-child(2) { opacity: 0; }
+.header-burger-icon.is-open span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+.header-mobile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(35, 49, 66, 0.06);
+}
+
+.header-mobile-link {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--lz-navy);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  transition: background var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+.header-mobile-link:hover,
+.header-mobile-link.active {
+  background: rgba(150, 153, 206, 0.14);
+  color: var(--lz-red-bright);
+}
+
+.header-mobile-cta {
+  margin-top: 8px;
+  justify-content: center;
+}
+
+/* Conteneur principal des pages (remplace le padding inline desktop-first). */
+.page-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 28px 80px;
+}
+
+/* Les corrections responsive mobile (< 768px) sont regroupées en fin de
+   fichier pour l'emporter sur les règles de base desktop-first. */
+
 /* ---------- Footer ------------------------------------------------------- */
 
 .footer {
@@ -444,6 +532,14 @@ button {
 }
 .footer-link:hover {
   color: var(--lz-white);
+}
+/* Bouton (ex : ouvrir le modal contact) rendu comme un lien de footer. */
+.footer-link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
 }
 
 .footer-bottom {
@@ -1269,6 +1365,73 @@ button {
   object-position: top center;
 }
 
+/* La capture full page se parcourt à la molette. Transition courte pour
+   lisser chaque cran sans traîner derrière le scroll. */
+@media (hover: hover) {
+  .realisation-card-screenshot {
+    transition: object-position 120ms var(--ease-out);
+  }
+}
+
+/* Visuel fixe (produit / outil) : on montre l'intégralité du screenshot. */
+.realisation-card-screenshot--fixed {
+  object-fit: contain;
+  background: #FFFFFF;
+}
+
+/* Carte sans visuel (ex : SEO & GMB) : structure de marque pleine, sans média. */
+.realisation-card--novisual {
+  height: 100%;
+  min-height: 300px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  background: linear-gradient(150deg, #9699CE 0%, #6E71AE 100%);
+  cursor: default;
+}
+
+.realisation-card-novisual-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(35, 49, 66, 0.18);
+}
+
+.realisation-card-novisual-cat {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.realisation-card-novisual-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+}
+
+.realisation-card-novisual-result {
+  display: inline-flex;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
 .realisation-card-placeholder {
   position: absolute;
   inset: 0;
@@ -1277,29 +1440,6 @@ button {
   justify-content: center;
   color: #9C9CB4;
   font-size: 14px;
-}
-
-.realisation-card-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 0;
-  background: #F5F5FA;
-  /* Rendue en taille desktop puis réduite via transform: scale() (inline). */
-  transform-origin: top left;
-  opacity: 0;
-  pointer-events: none;
-  cursor: grab;
-  transition: opacity 260ms var(--ease-out);
-}
-
-.realisation-card-iframe.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.realisation-card-iframe.is-active:active {
-  cursor: grabbing;
 }
 
 .realisation-card-badge {
@@ -2456,4 +2596,68 @@ button {
   line-height: var(--leading-relaxed);
   color: var(--fg-2);
   max-width: 560px;
+}
+
+/* =========================================================================
+   Corrections responsive mobile (< 768px) — placé en fin de fichier pour
+   surcharger les règles de base desktop-first (cascade : dernière règle
+   de spécificité égale l'emporte).
+   Le site est construit desktop-first ; on réduit ici paddings et tailles
+   pour éviter le débordement horizontal sur petit écran.
+   ========================================================================= */
+@media (max-width: 767px) {
+  .page-shell {
+    padding: 12px 16px 64px;
+  }
+
+  .header {
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
+  }
+  /* Mobile : hamburger visible, CTA desktop masqué. */
+  .header-burger { display: flex; }
+  .header-cta-desktop { display: none; }
+
+  /* Hero : moins de padding, mascotte qui ne force plus la largeur de page. */
+  .hero {
+    padding: 36px 18px 28px;
+    min-height: auto;
+    gap: var(--space-5);
+  }
+  .hero-headline {
+    font-size: 32px;
+  }
+  .hero-lead {
+    font-size: var(--text-md);
+  }
+  .hero-mascot {
+    height: auto;
+  }
+  .hero-mascot-img {
+    height: auto;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+  /* Cartes flottantes décoratives masquées sur mobile (évite les chevauchements). */
+  .hero-float-card {
+    display: none;
+  }
+
+  /* Titres de section adaptés au petit écran. */
+  .section-headline {
+    font-size: 28px;
+  }
+  .section-lead {
+    font-size: var(--text-md);
+  }
+
+  /* Espacements verticaux resserrés entre les grandes sections. */
+  .reviews { margin-top: var(--space-16); }
+  .services { margin-top: var(--space-16); }
+
+  /* Footer : padding latéral réduit. */
+  .footer {
+    padding: var(--space-10) 24px var(--space-6);
+  }
 }

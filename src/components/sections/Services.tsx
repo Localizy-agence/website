@@ -1,6 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import Underline from "../Underline";
-import Button from "../Button";
 
 interface ServiceCardProps {
   sticker: string;
@@ -49,9 +49,9 @@ export default function Services() {
           jargon ni prise de tête. Vous méritez d&apos;être vu autant que vous
           travaillez dur. On s&apos;en charge.
         </p>
-        <Button variant="ghost" className="mt-7">
+        <Link href="/a-propos" className="btn btn-ghost mt-7">
           Découvrir notre méthode <span className="arrow-anim">→</span>
-        </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

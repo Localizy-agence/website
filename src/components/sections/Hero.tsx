@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Button from "../Button";
+import Link from "next/link";
 import ContactButton from "../ContactButton";
 
 export default function Hero() {
@@ -30,9 +30,9 @@ export default function Hero() {
           <ContactButton>
             Parlons de votre projet <span className="arrow-anim">→</span>
           </ContactButton>
-          <Button variant="ghost">
+          <Link href="/services" className="btn btn-ghost">
             Découvrir nos services <span className="arrow-anim">→</span>
-          </Button>
+          </Link>
         </div>
 
       </div>

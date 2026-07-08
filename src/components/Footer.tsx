@@ -1,15 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useContactModal } from "./ContactModal";
 
 const footerLinks = [
   {
     title: "Services",
     items: [
-      { label: "Sites web", href: "/services#sites-web" },
-      { label: "SEO local", href: "/services#seo" },
-      { label: "Google My Business", href: "/services#gmb" },
-      { label: "Contenus", href: "/services#contenus" },
-      { label: "Maintenance", href: "/services#maintenance" },
+      { label: "Sites web", href: "/services#site-web" },
+      { label: "SEO & Google My Business", href: "/services#seo-gmb" },
+      { label: "SaaS & Outils", href: "/services#saas" },
     ],
   },
   {
@@ -17,26 +18,20 @@ const footerLinks = [
     items: [
       { label: "À propos", href: "/a-propos" },
       { label: "Réalisations", href: "/realisations" },
-      { label: "Méthode", href: "/methode" },
-      { label: "Blog", href: "/blog" },
-      { label: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Légal",
-    items: [
-      { label: "Mentions légales", href: "/mentions-legales" },
-      { label: "Confidentialité", href: "/confidentialite" },
-      { label: "CGV", href: "/cgv" },
-      { label: "Cookies", href: "/cookies" },
-    ],
+    items: [{ label: "Mentions légales", href: "/mentions-legales" }],
   },
 ];
 
 export default function Footer() {
+  const { openModal } = useContactModal();
+
   return (
     <footer className="footer">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
         <div className="flex flex-col gap-4">
           <Image
             src="/logo/localizy-logo-4.png"
@@ -68,6 +63,19 @@ export default function Footer() {
             ))}
           </div>
         ))}
+
+        <div>
+          <div className="footer-heading">Contact</div>
+          <button type="button" onClick={openModal} className="footer-link footer-link-btn">
+            Nous écrire
+          </button>
+          <a href="tel:+33781189424" className="footer-link">
+            07 81 18 94 24
+          </a>
+          <a href="mailto:contact@localizy.fr" className="footer-link">
+            contact@localizy.fr
+          </a>
+        </div>
       </div>
 
       <div className="footer-bottom">

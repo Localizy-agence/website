@@ -2,9 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Button from "@/components/Button";
 import ContactButton from "@/components/ContactButton";
 import Underline from "@/components/Underline";
 
@@ -139,7 +139,7 @@ export default function ServicesPageV2() {
             <ContactButton>
               Parler de mon projet <span className="arrow-anim">→</span>
             </ContactButton>
-            <Button variant="ghost">Voir les réalisations</Button>
+            <Link href="/realisations" className="btn btn-ghost">Voir les réalisations</Link>
           </div>
         </div>
 
@@ -242,9 +242,9 @@ export default function ServicesPageV2() {
               </div>
             </div>
 
-            <Button>
+            <ContactButton>
               Démarrer mon site <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
           </div>
 
           <div className="services-section-v2-right">
@@ -308,9 +308,9 @@ export default function ServicesPageV2() {
               </div>
             </div>
 
-            <Button>
+            <ContactButton>
               Auditer ma visibilité <span className="arrow-anim">→</span>
-            </Button>
+            </ContactButton>
           </div>
         </div>
       </section>
@@ -354,9 +354,9 @@ export default function ServicesPageV2() {
         </div>
 
         <div className="flex justify-center mt-10">
-          <Button>
+          <ContactButton>
             Découvrir les outils <span className="arrow-anim">→</span>
-          </Button>
+          </ContactButton>
         </div>
       </section>
 
