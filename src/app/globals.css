@@ -712,6 +712,27 @@ button {
   margin-top: var(--space-20);
 }
 
+/* Piste du carousel d'avis : défilement natif + scroll-snap. Swipe tactile
+   sur mobile, boutons/dots via scrollTo (calage exact par offsetLeft, sans
+   décalage lié au gap). Scrollbar masquée. */
+.reviews-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+}
+.reviews-track::-webkit-scrollbar {
+  display: none;
+}
+.reviews-track > .review-card {
+  scroll-snap-align: start;
+}
+
 .reviews-google-icon {
   width: 56px;
   height: 56px;
@@ -1466,6 +1487,12 @@ button {
   padding: 20px 24px;
 }
 
+/* Type affiché dans le corps de carte : visible uniquement en mobile
+   (liste compacte). En desktop, le type passe par le badge sur la capture. */
+.realisation-card-body-cat {
+  display: none;
+}
+
 .realisation-card-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -1483,6 +1510,62 @@ button {
   border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
+}
+
+/* ---------- Lightbox aperçu réalisation ---------------------------------- */
+/* Ouverte au clic sur une carte : la capture full-page s'affiche en grand,
+   l'overlay défile verticalement. */
+.realisation-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(20, 27, 38, 0.92);
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 48px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  cursor: zoom-out;
+  animation: lightbox-fade 160ms var(--ease-out);
+}
+@keyframes lightbox-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.realisation-lightbox-inner {
+  width: 100%;
+  max-width: 880px;
+  height: max-content;
+  cursor: default;
+}
+.realisation-lightbox-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+.realisation-lightbox-close {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out);
+}
+.realisation-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 /* ---------- Utilities ---------------------------------------------------- */
@@ -1505,14 +1588,14 @@ button {
 
 /* ---------- Services page ------------------------------------------------ */
 
-.services-hero {
+.izy-hero {
   margin-top: var(--space-8);
   padding: 72px 56px 56px;
   border-radius: var(--radius-xl);
   background: var(--bg-3);
 }
 
-.services-hero-headline {
+.izy-hero-headline {
   margin-top: var(--space-4);
   font-family: var(--font-display);
   font-weight: 700;
@@ -1522,7 +1605,7 @@ button {
   color: var(--lz-navy);
 }
 
-.services-hero-lead {
+.izy-hero-lead {
   margin-top: var(--space-5);
   font-family: var(--font-body);
   font-size: var(--text-lg);
@@ -1531,6 +1614,32 @@ button {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Hero page Services (texte à gauche, Izy à droite) — desktop-first.
+   Repli mobile dans le bloc @media (max-width:767px) en fin de fichier. */
+.izy-hero {
+  margin-top: 32px;
+  padding: 56px;
+  border-radius: 24px;
+  background-color: #F5F5FA;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.izy-hero-text {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+.izy-hero-izy {
+  position: relative;
+  width: 380px;
+  height: 400px;
+  flex-shrink: 0;
 }
 
 .services-tabs {
@@ -1758,7 +1867,7 @@ button {
 
 /* ---------- Services V2 -------------------------------------------------- */
 
-.services-hero-v2 {
+.izy-hero-v2 {
   margin-top: var(--space-8);
   padding: 56px;
   border-radius: var(--radius-xl);
@@ -1769,12 +1878,12 @@ button {
   align-items: center;
 }
 @media (min-width: 1024px) {
-  .services-hero-v2 {
+  .izy-hero-v2 {
     grid-template-columns: 1.2fr 0.8fr;
   }
 }
 
-.services-hero-v2-headline {
+.izy-hero-v2-headline {
   margin-top: var(--space-4);
   font-family: var(--font-display);
   font-weight: 700;
@@ -1784,7 +1893,7 @@ button {
   color: var(--lz-navy);
 }
 
-.services-hero-v2-lead {
+.izy-hero-v2-lead {
   margin-top: var(--space-4);
   font-family: var(--font-body);
   font-size: var(--text-lg);
@@ -1793,13 +1902,13 @@ button {
   max-width: 480px;
 }
 
-.services-hero-v2-visual {
+.izy-hero-v2-visual {
   display: flex;
   justify-content: center;
   align-items: flex-end;
 }
 
-.services-hero-v2-mascot {
+.izy-hero-v2-mascot {
   filter: drop-shadow(0 20px 30px rgba(35,49,66,0.15));
 }
 
@@ -2087,6 +2196,17 @@ button {
   margin-top: 140px;
   margin-bottom: 40px;
   padding: 0 var(--space-8);
+}
+
+/* Piste des cartes « Pourquoi Localizy » : grille 3 colonnes en desktop,
+   carousel scroll-snap en mobile (même mécanique que le carousel d'avis). */
+.pourquoi-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+.pourquoi-dots {
+  display: none;
 }
 
 /* ---------- About page --------------------------------------------------- */
@@ -2659,5 +2779,278 @@ button {
   /* Footer : padding latéral réduit. */
   .footer {
     padding: var(--space-10) 24px var(--space-6);
+  }
+
+  /* Bloc contact / CTA final (partagé) : padding latéral aligné sur le
+     contenu des autres cartes (28px au lieu de 56px). */
+  .final-cta {
+    padding: 0 28px;
+  }
+
+  /* ---- Page Services ---------------------------------------------------- */
+  /* Hero : repli en colonne, Izy recentré sous le texte (plus de largeur fixe). */
+  .izy-hero {
+    flex-direction: column;
+    padding: 32px 22px;
+    gap: 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .izy-hero-text .about-hero-lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .izy-hero-text .flex {
+    justify-content: center;
+  }
+  .izy-hero-izy {
+    width: 100%;
+    max-width: 260px;
+    height: 240px;
+    margin: 0 auto;
+  }
+
+  /* Sections : padding resserré pour éviter le débordement. */
+  .services-section-v2 {
+    padding: 28px 20px;
+    margin-top: 32px;
+  }
+  .services-livrables-v2 {
+    padding: 20px;
+  }
+  /* Réassurance : pas de padding latéral pour aligner les cartes sur la
+     largeur du bloc CTA en dessous (mêmes bords que .page-shell). */
+  .services-reassurance-v2 {
+    padding: 0;
+    margin-top: 72px;
+  }
+
+  /* Cartes « Pourquoi Localizy » en carousel scroll-snap (swipe + dots). */
+  .pourquoi-track {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
+  }
+  .pourquoi-track::-webkit-scrollbar {
+    display: none;
+  }
+  .pourquoi-track > .pourquoi-card {
+    scroll-snap-align: start;
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+  .pourquoi-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .pourquoi-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--border-2);
+    cursor: pointer;
+    transition: background 160ms var(--ease-out);
+  }
+  .pourquoi-dot.active {
+    background: var(--lz-red-bright);
+  }
+
+  /* Fusée du hero Services : recentrée en petit accent au-dessus d'Izy
+     (le left:-30% desktop la faisait déborder à gauche sur mobile). */
+  .services-hero-fusee {
+    top: -4% !important;
+    left: 6% !important;
+    width: 82px !important;
+    height: auto !important;
+  }
+
+  /* Titres de section un cran plus petits. */
+  .services-section-v2-title {
+    font-size: 26px;
+  }
+
+  /* Section SEO (grille inversée pour le swap desktop) : en mobile on remet
+     le bloc titre/texte au-dessus de la carte « Ce qu'on livre ». */
+  .services-section-v2-grid-reverse .services-section-v2-left {
+    order: -1;
+  }
+
+  /* ---- Page À propos ---------------------------------------------------- */
+  /* Sections construites en styles inline (flex row) : on force le repli
+     colonne en mobile. !important nécessaire pour l'emporter sur l'inline. */
+
+  /* Pourquoi Localizy + carte stats : empilés, carte pleine largeur. */
+  .about-why-v2 {
+    flex-direction: column !important;
+    padding: 28px 20px !important;
+    gap: 28px !important;
+  }
+  /* Carte stats : les 3 KPIs sur une seule ligne (dividers verticaux). */
+  .about-stats-card {
+    min-width: 0 !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    padding: 20px 12px !important;
+  }
+  .about-stat {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 4px !important;
+  }
+  .about-stat-value {
+    font-size: 30px !important;
+  }
+  .about-stat-value span {
+    font-size: 17px !important;
+  }
+  .about-stat-label {
+    font-size: 11px !important;
+    line-height: 1.3;
+  }
+  .about-stat-divider {
+    width: 1px !important;
+    height: auto !important;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+
+  /* Cœur du hero : réduit, remonté au-dessus d'Izy (il l'entourait à top:2%). */
+  .about-hero-coeur {
+    top: -5% !important;
+    width: 76px !important;
+    height: auto !important;
+  }
+
+  /* L'équipe + valeurs : mascotte recentrée en haut (plus d'absolute),
+     texte sans le retrait de 42 %, valeurs empilées. */
+  .about-team-v2b {
+    flex-direction: column !important;
+  }
+  .about-team-mascot {
+    position: static !important;
+    width: auto !important;
+    margin: 24px auto -8px !important;
+    display: flex;
+    justify-content: center;
+  }
+  .about-team-mascot img {
+    position: static !important;
+    width: 160px !important;
+    height: auto !important;
+  }
+  .about-team-content {
+    padding: 8px 22px 32px !important;
+  }
+  .about-values-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Notre approche : titre au-dessus des étapes, divider masqué. */
+  .about-approach-v2b {
+    flex-direction: column !important;
+    padding: 32px 22px !important;
+    gap: 24px !important;
+    margin-top: 56px !important;
+  }
+  .about-approach-divider {
+    display: none !important;
+  }
+  .about-approach-title {
+    font-size: 40px !important;
+  }
+
+  /* ---- Page Réalisations ------------------------------------------------ */
+  /* Étoiles du hero : au-dessus d'Izy, format réduit. */
+  .realisations-hero-etoiles {
+    top: -3% !important;
+    width: 108px !important;
+    height: auto !important;
+  }
+
+  /* Cartes réalisations : liste compacte (vignette à gauche + texte à droite).
+     Le scroll molette des captures ne marche pas au tactile → on montre une
+     vignette lisible et on passe en 1 colonne. */
+  .realisations-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Carte avec capture : ligne horizontale. */
+  .realisation-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 104px;
+  }
+  .realisation-card-media {
+    width: 128px;
+    flex-shrink: 0;
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+  /* Badge type masqué sur la vignette (trop petit) : le type passe dans le corps. */
+  .realisation-card-badge {
+    display: none;
+  }
+  .realisation-card-body {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .realisation-card-body-cat {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--lz-lavender);
+  }
+  .realisation-card-title {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+  /* Visuel fixe (ex : Ardila / SEO generator) : on remplit la vignette
+     (cover) au lieu du contain qui laissait du blanc. */
+  .realisation-card-screenshot--fixed {
+    object-fit: cover !important;
+    object-position: top center !important;
+  }
+
+  /* Carte sans visuel (marque) : même gabarit compact horizontal. */
+  .realisation-card--novisual {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    min-height: 104px;
+    padding: 14px 16px;
+  }
+  .realisation-card-novisual-tile {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .realisation-card-novisual-foot {
+    min-width: 0;
+  }
+  .realisation-card-novisual-name {
+    font-size: 18px;
+    margin-bottom: 8px;
   }
 }

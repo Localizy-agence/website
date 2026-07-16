@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const REVIEWS = [
   {
@@ -111,6 +111,7 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[0]; index: numbe
 export default function Reviews() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateVisibleCount = () => {
@@ -125,8 +126,36 @@ export default function Reviews() {
 
   const maxIndex = Math.max(0, REVIEWS.length - visibleCount);
 
-  const prev = () => setCurrentIndex((i) => Math.max(0, i - 1));
-  const next = () => setCurrentIndex((i) => Math.min(maxIndex, i + 1));
+  // Défilement natif (scroll-snap) : on scrolle la piste jusqu'à la carte i.
+  // offsetLeft inclut les gaps → calage exact, pas de décalage.
+  const scrollToIndex = (i: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const clamped = Math.max(0, Math.min(maxIndex, i));
+    const card = track.children[clamped] as HTMLElement | undefined;
+    if (card) track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  };
+
+  const prev = () => scrollToIndex(currentIndex - 1);
+  const next = () => scrollToIndex(currentIndex + 1);
+
+  // L'index actif suit la position de scroll (swipe tactile compris).
+  const handleScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = Array.from(track.children) as HTMLElement[];
+    const sl = track.scrollLeft;
+    let nearest = 0;
+    let best = Infinity;
+    cards.forEach((c, i) => {
+      const d = Math.abs(c.offsetLeft - sl);
+      if (d < best) {
+        best = d;
+        nearest = i;
+      }
+    });
+    setCurrentIndex(Math.min(maxIndex, nearest));
+  };
 
   const cardWidth = `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)`;
 
@@ -171,19 +200,14 @@ export default function Reviews() {
       </div>
 
       <div
-        className="overflow-hidden"
+        className="reviews-track"
+        ref={trackRef}
+        onScroll={handleScroll}
         style={{ "--card-width": cardWidth } as React.CSSProperties}
       >
-        <div
-          className="flex gap-4 transition-transform duration-300 ease-out"
-          style={{
-            transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-          }}
-        >
-          {REVIEWS.map((r, i) => (
-            <ReviewCard key={i} review={r} index={i} />
-          ))}
-        </div>
+        {REVIEWS.map((r, i) => (
+          <ReviewCard key={i} review={r} index={i} />
+        ))}
       </div>
 
       {/* Mobile navigation dots */}
@@ -191,7 +215,7 @@ export default function Reviews() {
         {Array.from({ length: REVIEWS.length }).map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrentIndex(i)}
+            onClick={() => scrollToIndex(i)}
             className={`w-2 h-2 rounded-full transition-colors ${
               i === currentIndex ? "bg-[var(--lz-red-bright)]" : "bg-[var(--border-2)]"
             }`}

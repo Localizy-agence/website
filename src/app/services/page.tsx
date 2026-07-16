@@ -73,6 +73,36 @@ export default function ServicesPageV2() {
   const [activeTab, setActiveTab] = useState("site-web");
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
+  // Carousel « Pourquoi Localizy » (mobile) : même mécanique scroll-snap que
+  // le carousel d'avis — swipe natif + calage exact via offsetLeft.
+  const pourquoiTrackRef = useRef<HTMLDivElement>(null);
+  const [pourquoiIndex, setPourquoiIndex] = useState(0);
+
+  const scrollToPourquoi = (i: number) => {
+    const track = pourquoiTrackRef.current;
+    if (!track) return;
+    const clamped = Math.max(0, Math.min(reassuranceItems.length - 1, i));
+    const card = track.children[clamped] as HTMLElement | undefined;
+    if (card) track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  };
+
+  const handlePourquoiScroll = () => {
+    const track = pourquoiTrackRef.current;
+    if (!track) return;
+    const cards = Array.from(track.children) as HTMLElement[];
+    const sl = track.scrollLeft;
+    let nearest = 0;
+    let best = Infinity;
+    cards.forEach((c, i) => {
+      const d = Math.abs(c.offsetLeft - sl);
+      if (d < best) {
+        best = d;
+        nearest = i;
+      }
+    });
+    setPourquoiIndex(nearest);
+  };
+
   useEffect(() => {
     const headerHeight = 80;
     const tabsHeight = 60;
@@ -110,24 +140,13 @@ export default function ServicesPageV2() {
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto" style={{ padding: "16px 28px 80px" }}>
+    <div className="page-shell">
       <Header />
 
       {/* Hero - texte à gauche, Izy à droite */}
-      <section style={{
-        marginTop: "32px",
-        padding: "56px",
-        borderRadius: "24px",
-        backgroundColor: "#F5F5FA",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: "40px",
-        position: "relative",
-        overflow: "hidden"
-      }}>
+      <section className="izy-hero">
         {/* Contenu texte à gauche */}
-        <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
+        <div className="izy-hero-text">
           <div className="section-eyebrow">· Nos prestations ·</div>
           <h1 className="about-hero-headline" style={{ marginTop: "16px" }}>
             Tout ce qu&apos;il faut pour <Underline>exister</Underline> — et gagner — en ligne<span className="hero-accent">.</span>
@@ -144,14 +163,10 @@ export default function ServicesPageV2() {
         </div>
 
         {/* Zone Izy + sticker à droite */}
-        <div style={{
-          position: "relative",
-          width: "380px",
-          height: "400px",
-          flexShrink: 0
-        }}>
+        <div className="izy-hero-izy">
           {/* Sticker fusée à gauche d'Izy */}
           <Image
+            className="services-hero-fusee"
             src="/stickers/fusee.svg"
             alt=""
             width={140}
@@ -369,7 +384,11 @@ export default function ServicesPageV2() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div
+          className="pourquoi-track"
+          ref={pourquoiTrackRef}
+          onScroll={handlePourquoiScroll}
+        >
           {reassuranceItems.map((item, i) => (
             <div key={i} className="pourquoi-card hover-lift">
               <div className="pourquoi-icon">
@@ -384,6 +403,19 @@ export default function ServicesPageV2() {
               <h3 className="pourquoi-title">{item.title}</h3>
               <p className="pourquoi-body">{item.body}</p>
             </div>
+          ))}
+        </div>
+
+        {/* Dots navigation (mobile uniquement) */}
+        <div className="pourquoi-dots">
+          {reassuranceItems.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => scrollToPourquoi(i)}
+              className={`pourquoi-dot ${i === pourquoiIndex ? "active" : ""}`}
+              aria-label={`Voir le point ${i + 1}`}
+            />
           ))}
         </div>
       </section>

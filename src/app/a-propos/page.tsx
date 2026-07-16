@@ -45,24 +45,13 @@ const values = [
 
 export default function AProposPage() {
   return (
-    <div className="max-w-[1280px] mx-auto" style={{ padding: "16px 28px 80px" }}>
+    <div className="page-shell">
       <Header />
 
       {/* Hero - texte à gauche, Izy à droite avec stickers */}
-      <section style={{
-        marginTop: "32px",
-        padding: "56px",
-        borderRadius: "24px",
-        backgroundColor: "#F5F5FA",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: "40px",
-        position: "relative",
-        overflow: "hidden"
-      }}>
+      <section className="izy-hero">
         {/* Contenu texte à gauche */}
-        <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
+        <div className="izy-hero-text">
           <div className="section-eyebrow">· À propos ·</div>
           <h1 className="about-hero-headline" style={{ marginTop: "16px" }}>
             Une agence proche des <Underline>entreprises locales</Underline>
@@ -81,14 +70,10 @@ export default function AProposPage() {
         </div>
 
         {/* Zone Izy + stickers à droite */}
-        <div style={{
-          position: "relative",
-          width: "380px",
-          height: "400px",
-          flexShrink: 0
-        }}>
+        <div className="izy-hero-izy">
           {/* Sticker coeur au-dessus d'Izy */}
           <Image
+            className="about-hero-coeur"
             src="/stickers/coeur.svg"
             alt=""
             width={120}
@@ -121,7 +106,7 @@ export default function AProposPage() {
       </section>
 
       {/* Pourquoi Localizy + Stats combinés */}
-      <section style={{
+      <section className="about-why-v2" style={{
         marginTop: "80px",
         padding: "48px",
         borderRadius: "24px",
@@ -183,7 +168,7 @@ export default function AProposPage() {
             </div>
           </div>
         </div>
-        <div style={{
+        <div className="about-stats-card" style={{
           display: "flex",
           flexDirection: "column",
           backgroundColor: "#233142",
@@ -193,31 +178,31 @@ export default function AProposPage() {
           minWidth: "220px",
           alignSelf: "stretch"
         }}>
-          <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
+          <div className="about-stat" style={{ textAlign: "center", padding: "24px 0" }}>
+            <div className="about-stat-value" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
               +20
             </div>
-            <div style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>entreprises accompagnées</div>
+            <div className="about-stat-label" style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>entreprises accompagnées</div>
           </div>
-          <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.15)" }} />
-          <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
+          <div className="about-stat-divider" style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.15)" }} />
+          <div className="about-stat" style={{ textAlign: "center", padding: "24px 0" }}>
+            <div className="about-stat-value" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
               5<span style={{ fontSize: "24px", color: "#BABBDE" }}>/5</span>
             </div>
-            <div style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>note Google</div>
+            <div className="about-stat-label" style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>note Google</div>
           </div>
-          <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.15)" }} />
-          <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
+          <div className="about-stat-divider" style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.15)" }} />
+          <div className="about-stat" style={{ textAlign: "center", padding: "24px 0" }}>
+            <div className="about-stat-value" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "42px", color: "#FFFFFF" }}>
               24<span style={{ fontSize: "24px", color: "#BABBDE" }}>h</span>
             </div>
-            <div style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>temps de réponse</div>
+            <div className="about-stat-label" style={{ marginTop: "8px", fontSize: "13px", color: "rgba(255,255,255,0.7)" }}>temps de réponse</div>
           </div>
         </div>
       </section>
 
       {/* L'équipe + Valeurs fusionnés */}
-      <section style={{
+      <section className="about-team-v2b" style={{
         marginTop: "80px",
         borderRadius: "24px",
         backgroundColor: "#9699CE",
@@ -226,7 +211,7 @@ export default function AProposPage() {
         overflow: "hidden",
         position: "relative"
       }}>
-        <div style={{
+        <div className="about-team-mascot" style={{
           position: "absolute",
           bottom: "-140px",
           left: "30px",
@@ -242,7 +227,7 @@ export default function AProposPage() {
             }}
           />
         </div>
-        <div style={{ flex: 1, padding: "40px 48px 40px 42%", display: "flex", flexDirection: "column" }}>
+        <div className="about-team-content" style={{ flex: 1, padding: "40px 48px 40px 42%", display: "flex", flexDirection: "column" }}>
           <div style={{
             fontSize: "13px",
             fontWeight: 600,
@@ -273,7 +258,7 @@ export default function AProposPage() {
           </p>
 
           {/* Valeurs en ligne - style léger */}
-          <div style={{
+          <div className="about-values-row" style={{
             display: "flex",
             gap: "24px",
             marginTop: "24px",
@@ -328,7 +313,7 @@ export default function AProposPage() {
       </section>
 
       {/* Notre approche - Layout horizontal */}
-      <section style={{
+      <section className="about-approach-v2b" style={{
         marginTop: "100px",
         padding: "56px 48px",
         borderRadius: "24px",
@@ -339,7 +324,7 @@ export default function AProposPage() {
         alignItems: "stretch"
       }}>
         <div style={{ flexShrink: 0 }}>
-          <h2 style={{
+          <h2 className="about-approach-title" style={{
             fontFamily: "var(--font-display)",
             fontWeight: 700,
             fontSize: "56px",
@@ -350,7 +335,7 @@ export default function AProposPage() {
             Notre<br /><Underline>approche</Underline>
           </h2>
         </div>
-        <div style={{
+        <div className="about-approach-divider" style={{
           width: "1px",
           backgroundColor: "#C8C8DA",
           flexShrink: 0

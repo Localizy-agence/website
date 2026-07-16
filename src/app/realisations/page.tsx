@@ -38,15 +38,6 @@ const projects: Project[] = [
     screenshot: "/images/kdioverseas.png",
   },
   {
-    id: 3,
-    name: "Mon Projet Rentable",
-    type: "Site vitrine",
-    sticker: "ordinateur",
-    categories: ["site-web"],
-    url: "https://monprojetrentable.com/",
-    screenshot: "/images/monprojetrentable.png",
-  },
-  {
     id: 4,
     name: "Ardila",
     type: "Générateur d'articles SEO",
@@ -93,24 +84,13 @@ export default function RealisationsPage() {
     ? projects
     : projects.filter((p) => p.categories.includes(activeFilter));
   return (
-    <div className="max-w-[1280px] mx-auto" style={{ padding: "16px 28px 80px" }}>
+    <div className="page-shell">
       <Header />
 
       {/* Hero - texte à gauche, Izy à droite */}
-      <section style={{
-        marginTop: "32px",
-        padding: "56px",
-        borderRadius: "24px",
-        backgroundColor: "#F5F5FA",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: "40px",
-        position: "relative",
-        overflow: "hidden"
-      }}>
+      <section className="izy-hero">
         {/* Contenu texte à gauche */}
-        <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
+        <div className="izy-hero-text">
           <div className="section-eyebrow">· Nos réalisations ·</div>
           <h1 className="about-hero-headline" style={{ marginTop: "16px" }}>
             Des projets qui <Underline>parlent</Underline> d&apos;eux-mêmes<span className="hero-accent">.</span>
@@ -127,14 +107,10 @@ export default function RealisationsPage() {
         </div>
 
         {/* Zone Izy + sticker à droite */}
-        <div style={{
-          position: "relative",
-          width: "380px",
-          height: "400px",
-          flexShrink: 0
-        }}>
+        <div className="izy-hero-izy">
           {/* Sticker étoiles au-dessus d'Izy */}
           <Image
+            className="realisations-hero-etoiles"
             src="/stickers/etoiles.svg"
             alt=""
             width={150}
@@ -189,7 +165,7 @@ export default function RealisationsPage() {
       </section>
 
       {/* Grille de projets */}
-      <section style={{
+      <section className="realisations-grid" style={{
         marginTop: "32px",
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",

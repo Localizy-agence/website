@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export type Project = {
@@ -12,12 +12,9 @@ export type Project = {
   categories: string[];
   url?: string;
   screenshot?: string;
-  // Visuel affiché tel quel (pas de défilement à la molette) : produit, outil…
+  // Visuel affiché tel quel (produit, outil…) plutôt qu'une capture full-page.
   fixed?: boolean;
 };
-
-// Sensibilité de la molette : % de la capture parcouru par « cran » (~100px).
-const WHEEL_SPEED = 0.12;
 
 export default function RealisationCard({
   project,
@@ -27,39 +24,26 @@ export default function RealisationCard({
   priority?: boolean;
 }) {
   const hasVisual = Boolean(project.screenshot);
-  const scrollable = hasVisual && !project.fixed;
 
-  // La capture « full page » très haute défile de haut (0%) en bas (100%) à la
-  // molette tant qu'on n'est pas en bout de course ; aux extrémités, la page
-  // reprend son défilement naturel.
-  const [posY, setPosY] = useState(0);
-  const posRef = useRef(0);
-  const mediaRef = useRef<HTMLDivElement>(null);
+  // Au clic sur une carte, la capture s'ouvre en grand dans une lightbox
+  // (remplace l'ancien défilement à la molette, inutilisable au tactile).
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
-    const el = mediaRef.current;
-    if (!el || !scrollable) return;
-
-    const onWheel = (e: WheelEvent) => {
-      const next = Math.min(100, Math.max(0, posRef.current + e.deltaY * WHEEL_SPEED));
-      if (next !== posRef.current) {
-        e.preventDefault();
-        posRef.current = next;
-        setPosY(next);
-      }
+    if (!lightboxOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxOpen(false);
     };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [lightboxOpen]);
 
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [scrollable]);
-
-  const resetScroll = () => {
-    posRef.current = 0;
-    setPosY(0);
-  };
-
-  // Carte sans visuel (ex : SEO & GMB) : structure différente des cartes avec
-  // capture — une carte de marque pleine, sans zone média.
+  // Carte sans visuel (ex : SEO & GMB) : structure de marque pleine, sans média.
   if (!hasVisual) {
     return (
       <div className="realisation-card realisation-card--novisual">
@@ -85,41 +69,79 @@ export default function RealisationCard({
   }
 
   return (
-    <div className="realisation-card">
+    <>
       <div
-        className="realisation-card-media"
-        ref={mediaRef}
-        onMouseLeave={scrollable ? resetScroll : undefined}
+        className="realisation-card"
+        role="button"
+        tabIndex={0}
+        aria-label={`Voir l'aperçu de ${project.name}`}
+        onClick={() => setLightboxOpen(true)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setLightboxOpen(true);
+          }
+        }}
       >
-        <Image
-          src={project.screenshot as string}
-          alt={`Aperçu du site ${project.name}`}
-          fill
-          sizes="(max-width: 768px) 100vw, 600px"
-          priority={priority}
-          className={`realisation-card-screenshot ${project.fixed ? "realisation-card-screenshot--fixed" : ""}`}
-          style={scrollable ? { objectPosition: `center ${posY}%` } : undefined}
-        />
-
-        {/* Badge catégorie */}
-        <div className="realisation-card-badge">
+        <div className="realisation-card-media">
           <Image
-            src={`/stickers/${project.sticker}.svg`}
-            alt=""
-            width={16}
-            height={16}
-            style={{ width: "16px", height: "16px", objectFit: "contain" }}
+            src={project.screenshot as string}
+            alt={`Aperçu du site ${project.name}`}
+            fill
+            sizes="(max-width: 768px) 128px, 600px"
+            priority={priority}
+            className={`realisation-card-screenshot ${project.fixed ? "realisation-card-screenshot--fixed" : ""}`}
           />
-          <span className="realisation-card-badge-label">{project.type}</span>
+
+          {/* Badge catégorie */}
+          <div className="realisation-card-badge">
+            <Image
+              src={`/stickers/${project.sticker}.svg`}
+              alt=""
+              width={16}
+              height={16}
+              style={{ width: "16px", height: "16px", objectFit: "contain" }}
+            />
+            <span className="realisation-card-badge-label">{project.type}</span>
+          </div>
+        </div>
+
+        <div className="realisation-card-body">
+          {/* Type : affiché ici en mobile (liste compacte), via le badge en desktop. */}
+          <span className="realisation-card-body-cat">{project.type}</span>
+          <h3 className="realisation-card-title">{project.name}</h3>
+          {project.result ? (
+            <div className="realisation-card-result">{project.result}</div>
+          ) : null}
         </div>
       </div>
 
-      <div className="realisation-card-body">
-        <h3 className="realisation-card-title">{project.name}</h3>
-        {project.result ? (
-          <div className="realisation-card-result">{project.result}</div>
-        ) : null}
-      </div>
-    </div>
+      {lightboxOpen ? (
+        <div
+          className="realisation-lightbox"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            type="button"
+            className="realisation-lightbox-close"
+            aria-label="Fermer l'aperçu"
+            onClick={() => setLightboxOpen(false)}
+          >
+            ×
+          </button>
+          <div
+            className="realisation-lightbox-inner"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={project.screenshot as string}
+              alt={`Aperçu complet du site ${project.name}`}
+              className="realisation-lightbox-img"
+            />
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

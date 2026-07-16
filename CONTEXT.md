@@ -110,7 +110,7 @@ git add . && git commit -m "message" && git push
 - [x] Navigation & boutons reliés aux pages / modal
 - [x] Responsive mobile page d'accueil (menu hamburger inclus)
 - [x] Images optimisées webp (equipe, bureau, ardila_seogenerator < 100 Ko)
-- [ ] **Responsive mobile des autres pages** (Services, À propos, Réalisations — layouts `flexDirection:"row"` + zones Izy largeur fixe à replier ; leur appliquer aussi `.page-shell`)
+- [x] **Responsive mobile des autres pages** (Services, À propos, Réalisations : heros repliés via classe partagée `.izy-hero`, sections `flexDirection:"row"` repliées en colonne, `.page-shell` appliqué partout)
 - [ ] Remplir la page Mentions légales (infos client)
 - [ ] Ajouter visuels LinkedIn
 - [ ] Blog (reporté)
@@ -126,7 +126,9 @@ git add . && git commit -m "message" && git push
 
 ### Dév mobile / CSS (⚠️ important)
 - Site **desktop-first**. Corrections responsive dans un bloc `@media (max-width:767px)` **en fin** de `globals.css` (doit rester en fin : les règles custom sont non-layered, la dernière l'emporte à spécificité égale).
-- Conteneur de page = classe `.page-shell` (padding responsive). La home l'utilise ; les autres pages ont encore un padding inline à migrer.
+- Conteneur de page = classe `.page-shell` (padding responsive). Utilisée sur **toutes** les pages désormais (home, services, à propos, réalisations).
+- Hero « texte à gauche + Izy à droite » = classe partagée `.izy-hero` / `.izy-hero-text` / `.izy-hero-izy` (services, à propos, réalisations). Repli colonne en mobile dans le bloc `@media (max-width:767px)`.
+- Sections À propos encore stylées en inline : classes-hook (`.about-why-v2`, `.about-stats-card`, `.about-team-v2b`, `.about-team-mascot`, `.about-values-row`, `.about-approach-v2b`, `.about-approach-divider`) surchargées en mobile avec `!important` (obligatoire pour l'emporter sur le style inline).
 - Pour screenshot mobile fidèle : **émulation CDP** (`Emulation.setDeviceMetricsOverride`), pas `chrome --window-size` (n'applique pas le meta viewport → faux débordement).
 - Turbopack sert parfois du **CSS périmé** en dev : ne pas `build` pendant que `dev` tourne ; redémarrer avec `rm -rf .next`.
 - Push GitHub avec le compte **`Localizy-agence`** (pas `Rickko18`).
