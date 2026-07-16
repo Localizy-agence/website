@@ -1211,6 +1211,22 @@ button {
   border-radius: var(--radius-xs);
 }
 
+/* Piste des publications LinkedIn : grille en desktop, carousel scroll-snap
+   en mobile (même mécanique que les autres sliders). */
+.linkedin-track {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 1024px) {
+  .linkedin-track {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.linkedin-dots {
+  display: none;
+}
+
 .linkedin-card {
   background: var(--lz-white);
   border-radius: var(--radius-lg);
@@ -3052,5 +3068,45 @@ button {
   .realisation-card-novisual-name {
     font-size: 18px;
     margin-bottom: 8px;
+  }
+
+  /* ---- Publications LinkedIn : carousel scroll-snap (swipe + dots) ------- */
+  .linkedin-track {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
+  }
+  .linkedin-track::-webkit-scrollbar {
+    display: none;
+  }
+  .linkedin-track > .linkedin-card {
+    scroll-snap-align: start;
+    flex: 0 0 80%;
+    min-width: 0;
+  }
+  .linkedin-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .linkedin-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--border-2);
+    cursor: pointer;
+    transition: background 160ms var(--ease-out);
+  }
+  .linkedin-dot.active {
+    background: var(--lz-red-bright);
   }
 }

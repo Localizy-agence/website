@@ -47,10 +47,6 @@ export default function Header() {
 
       <div className="flex-1" />
 
-      <a href="tel:+33781189424" className="header-phone hidden lg:block cursor-pointer">
-        07 81 18 94 24
-      </a>
-
       {/* CTA desktop / tablette (masqué en mobile via CSS) */}
       <button className="header-cta header-cta-desktop" onClick={openModal}>
         Parlons de votre projet <span className="arrow-anim">→</span>

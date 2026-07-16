@@ -32,7 +32,7 @@ const sections = [
   },
   {
     title: "Contact",
-    body: "Pour toute question relative aux présentes mentions légales : contact@localizy.fr — 07 81 18 94 24.",
+    body: "Pour toute question relative aux présentes mentions légales : contact@localizy.fr — 07 81 18 94 24 / 06 59 94 66 12.",
   },
 ];
 

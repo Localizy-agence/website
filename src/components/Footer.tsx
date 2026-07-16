@@ -44,13 +44,6 @@ export default function Footer() {
             L&apos;agence locale qui fait briller les entreprises de l&apos;Oise et
             alentours sur le web.
           </p>
-          <div className="flex gap-2 mt-1">
-            {["in", "ig", "f"].map((s) => (
-              <span key={s} className="footer-social">
-                {s}
-              </span>
-            ))}
-          </div>
         </div>
 
         {footerLinks.map((col) => (
@@ -71,6 +64,9 @@ export default function Footer() {
           </button>
           <a href="tel:+33781189424" className="footer-link">
             07 81 18 94 24
+          </a>
+          <a href="tel:+33659946612" className="footer-link">
+            06 59 94 66 12
           </a>
           <a href="mailto:contact@localizy.fr" className="footer-link">
             contact@localizy.fr

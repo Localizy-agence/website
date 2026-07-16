@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Underline from "../Underline";
 
@@ -29,6 +30,35 @@ const LINKEDIN_POSTS = [
 const bgColors = ["#EFEEFB", "#FFE9E0", "#E8EDF5", "#FFF3D9"];
 
 export default function LinkedIn() {
+  // Carousel (mobile) : même mécanique scroll-snap que les autres sliders.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+
+  const scrollToIndex = (i: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const clamped = Math.max(0, Math.min(LINKEDIN_POSTS.length - 1, i));
+    const card = track.children[clamped] as HTMLElement | undefined;
+    if (card) track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = Array.from(track.children) as HTMLElement[];
+    const sl = track.scrollLeft;
+    let nearest = 0;
+    let best = Infinity;
+    cards.forEach((c, i) => {
+      const d = Math.abs(c.offsetLeft - sl);
+      if (d < best) {
+        best = d;
+        nearest = i;
+      }
+    });
+    setIndex(nearest);
+  };
+
   return (
     <section className="linkedin">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-end mb-10">
@@ -56,7 +86,11 @@ export default function LinkedIn() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        className="linkedin-track"
+        ref={trackRef}
+        onScroll={handleScroll}
+      >
         {LINKEDIN_POSTS.map((p, i) => (
           <div key={i} className="linkedin-card hover-lift">
             <div
@@ -77,6 +111,19 @@ export default function LinkedIn() {
               <span>{p.tag}</span>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Dots navigation (mobile uniquement) */}
+      <div className="linkedin-dots">
+        {LINKEDIN_POSTS.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => scrollToIndex(i)}
+            className={`linkedin-dot ${i === index ? "active" : ""}`}
+            aria-label={`Voir la publication ${i + 1}`}
+          />
         ))}
       </div>
     </section>
