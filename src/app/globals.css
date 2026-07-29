@@ -2734,6 +2734,20 @@ button {
   max-width: 560px;
 }
 
+/* Liens dans le corps des pages légales (mentions légales, confidentialité) */
+.legal-link {
+  color: var(--lz-navy);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--lz-lavender);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.legal-link:hover {
+  color: var(--lz-red-bright);
+  text-decoration-color: var(--lz-red-bright);
+}
+
 /* =========================================================================
    Corrections responsive mobile (< 768px) — placé en fin de fichier pour
    surcharger les règles de base desktop-first (cascade : dernière règle

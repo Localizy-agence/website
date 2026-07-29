@@ -22,7 +22,10 @@ const footerLinks = [
   },
   {
     title: "Légal",
-    items: [{ label: "Mentions légales", href: "/mentions-legales" }],
+    items: [
+      { label: "Mentions légales", href: "/mentions-legales" },
+      { label: "Confidentialité", href: "/confidentialite" },
+    ],
   },
 ];
 

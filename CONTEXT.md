@@ -19,12 +19,13 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 - Page Services complète avec navigation sticky tabs
 - Page À propos avec hero Izy, stats, valeurs, approche (+ photos équipe & bureau)
 - Page Réalisations avec grille filtrable + cartes interactives (scroll molette sur captures, visuel fixe, carte de marque sans visuel)
-- Page Mentions légales (placeholder à remplir)
+- Pages Mentions légales et Politique de confidentialité (contenu réel, infos société)
 - Formulaire de contact en modal (3 étapes, EmailJS)
 - Design system complet dans `globals.css` (+ bloc `@media (max-width:767px)` mobile en fin de fichier)
 - Navigation & boutons tous reliés (pages ou modal contact)
 - Carousel avis Google (9 avis réels)
 - Chatbot Localizy intégré sur toutes les pages
+- Landing page **Izy Réservation** (`/izy-reservation/`), non reliée au site (accès par le lien uniquement)
 - Déploiement automatique sur push vers main
 
 ### Fichiers clés
@@ -40,8 +41,10 @@ src/
 │   │   └── page.tsx      # Page À propos (hero Izy, stats, valeurs)
 │   ├── realisations/
 │   │   └── page.tsx      # Page Réalisations (grille filtrable)
-│   └── mentions-legales/
-│       └── page.tsx      # Mentions légales (placeholder à remplir)
+│   ├── mentions-legales/
+│   │   └── page.tsx      # Mentions légales (éditeur, hébergeur, PI, cookies)
+│   └── confidentialite/
+│       └── page.tsx      # Politique de confidentialité (RGPD)
 ├── components/
 │   ├── Header.tsx           # Nav + menu hamburger mobile
 │   ├── Footer.tsx           # Client (lien Contact = modal)
@@ -49,6 +52,7 @@ src/
 │   ├── ContactButton.tsx    # Bouton qui ouvre le modal contact
 │   ├── ContactModal.tsx     # Modal contact 3 étapes + EmailJS
 │   ├── ClientProviders.tsx  # Provider pour le modal
+│   ├── LegalPage.tsx        # Gabarit partagé des pages légales
 │   ├── Underline.tsx
 │   └── sections/
 │       ├── Hero.tsx
@@ -62,6 +66,8 @@ src/
 ├── lib/
 │   └── assets.ts
 public/
+├── izy-reservation/
+│   └── index.html        # Landing Izy Réservation (HTML autonome, hors Next)
 ├── chatbot/              # Widget chatbot Localizy
 │   ├── chatbot.js
 │   ├── chatbot.css
@@ -111,7 +117,7 @@ git add . && git commit -m "message" && git push
 - [x] Responsive mobile page d'accueil (menu hamburger inclus)
 - [x] Images optimisées webp (equipe, bureau, ardila_seogenerator < 100 Ko)
 - [x] **Responsive mobile des autres pages** (Services, À propos, Réalisations : heros repliés via classe partagée `.izy-hero`, sections `flexDirection:"row"` repliées en colonne, `.page-shell` appliqué partout)
-- [ ] Remplir la page Mentions légales (infos client)
+- [x] Mentions légales + politique de confidentialité remplies
 - [ ] Ajouter visuels LinkedIn
 - [ ] Blog (reporté)
 - [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
@@ -123,6 +129,13 @@ git add . && git commit -m "message" && git push
 - Coordonnées : contact@localizy.fr / 07 81 18 94 24 — note Google réelle : 5/5
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
+
+### Landing Izy Réservation
+- Fichier unique `public/izy-reservation/index.html` : HTML/CSS/JS autonome (polices et images en base64), **volontairement hors du système de design Next** pour éviter toute collision avec `globals.css`.
+- Servie telle quelle par `output: "export"` (public/ est copié dans out/). URL : `/izy-reservation/`.
+- Aucun lien depuis le site (nav, footer, sitemap) → accessible uniquement par son lien. `<meta name="robots" content="noindex, follow">` pour qu'elle ne remonte pas non plus dans Google.
+- Les CTA ouvrent le modal intégré à la page, dont l'envoi passe par **EmailJS** avec `service_id`/`public_key` lus dans `/chatbot/config.js` et le template **`template_mn1zobn`** — le même que le formulaire de contact du site : les leads arrivent dans la même boîte, au même format. Les UTM (`?utm_source=…`) et la variante A/B du titre sont joints au lead.
+- ⚠️ En `next dev`, `/izy-reservation/` renvoie 404 (le serveur de dev ne résout pas l'index de répertoire du dossier public) : tester `/izy-reservation/index.html`. En prod (Apache o2switch) et dans `out/`, `/izy-reservation/` fonctionne.
 
 ### Dév mobile / CSS (⚠️ important)
 - Site **desktop-first**. Corrections responsive dans un bloc `@media (max-width:767px)` **en fin** de `globals.css` (doit rester en fin : les règles custom sont non-layered, la dernière l'emporte à spécificité égale).
