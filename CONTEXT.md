@@ -104,8 +104,16 @@ git add . && git commit -m "message" && git push
 ```
 
 ## Fichiers de documentation
-- `GUIDE-DEPLOIEMENT.md` — Guide complet pour déployer une nouvelle app
-- `README-DEPLOY.md` — Documentation technique déploiement
+- `README.md` — entrée du dépôt : démarrer, déployer, ce que contient quoi
+- `CONTEXT.md` — ce fichier : décisions, pièges connus, conventions
+- `GUIDE-DEPLOIEMENT.md` — comment le pipeline GitHub Actions a été monté (à refaire ailleurs)
+
+> `deploy.sh` et `README-DEPLOY.md` ont été supprimés le 29/07/2026. Ils décrivaient un
+> déploiement SSH depuis o2switch (clone du repo sur le serveur, build sur place, copie
+> vers `public_html`, cron) **jamais configuré** : le script était resté rempli de
+> `VOTRE-USERNAME`. Le déploiement réel passe par GitHub Actions depuis le début. Les
+> garder revenait à proposer à un nouvel arrivant un chemin qui ne mène nulle part, avec
+> un `rm -rf` dedans. Ils restent dans l'historique git si besoin.
 
 ## Prochaines étapes
 - [x] Page Services créée
@@ -131,11 +139,60 @@ git add . && git commit -m "message" && git push
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
 
 ### Landing IzyRESA
+
+> 🚨 **`public/izy-reservation/index.html` est un fichier GÉNÉRÉ. Ne le modifiez pas ici.**
+> La source vit **hors de ce dépôt**, dans `Localizy V2/GTM Revente Salons/build/` :
+> `izy-landing.template.html` (le vrai fichier à éditer) + `inline.js` (qui encode
+> polices et images en base64). Toute retouche faite directement dans ce dépôt sera
+> écrasée à la publication suivante.
+>
+> **Publier une nouvelle version :**
+> 1. éditer `build/izy-landing.template.html` dans le dossier GTM ;
+> 2. `node build/inline.js` — il produit trois fichiers ;
+> 3. copier **`izy-reservation-site.html`** (le document complet, le seul déployable)
+>    vers `public/izy-reservation/index.html` ;
+> 4. commit + push.
+>
+> ⚠️ **Le piège :** `izy-reservation-landing.html` est un *fragment* sans `<head>`,
+> destiné à la prévisualisation. Déployé à la place du document complet, il casse la
+> page — sans `<meta charset>` les accents deviennent « AchetÃ©e », sans
+> `<meta viewport>` le mobile s'affiche en pleine largeur de bureau. **C'est arrivé le
+> 29/07/2026.** Le générateur nomme désormais explicitement le seul fichier déployable.
+>
+> ⚠️ **Toujours comparer la page en ligne au dépôt avant d'écraser.** Les deux ont
+> divergé dans les deux sens (intégration EmailJS faite côté serveur, lien de pied de
+> page modifié à la main) : une copie aveugle a déjà failli effacer l'intégration qui
+> capte les leads.
+
 - Fichier unique `public/izy-reservation/index.html` : HTML/CSS/JS autonome (polices et images en base64), **volontairement hors du système de design Next** pour éviter toute collision avec `globals.css`.
+- `og-izy-reservation.png` (1200×630) est le visuel d'aperçu, référencé par `og:image`.
+  ⚠️ Il manquait jusqu'au 29/07 : l'URL renvoyait la page « It works! » du serveur, et
+  **tout lien partagé par SMS ou WhatsApp s'affichait sans image**. C'est précisément le
+  canal visé. Si le visuel change, le redéposer ici, pas seulement dans le dossier GTM.
+- **Barre d'action mobile** : sous 640 px, la pastille flottante est remplacée par une
+  barre fixe pleine largeur qui se lève quand le bouton du hero sort de l'écran. La
+  pastille recouvrait du texte à presque chaque écran, et c'est aussi le seul appel à
+  l'action restant en bas de page depuis le retrait de la section finale.
 - Servie telle quelle par `output: "export"` (public/ est copié dans out/). URL : `/izy-reservation/`.
 - Aucun lien depuis le site (nav, footer, sitemap) → accessible uniquement par son lien. `<meta name="robots" content="noindex, follow">` pour qu'elle ne remonte pas non plus dans Google.
 - Les CTA ouvrent le modal intégré à la page, dont l'envoi passe par **EmailJS** avec `service_id`/`public_key` lus dans `/chatbot/config.js` et le template **`template_mn1zobn`** — le même que le formulaire de contact du site : les leads arrivent dans la même boîte, au même format. Les UTM (`?utm_source=…`) et la variante A/B du titre sont joints au lead.
 - ⚠️ En `next dev`, `/izy-reservation/` renvoie 404 (le serveur de dev ne résout pas l'index de répertoire du dossier public) : tester `/izy-reservation/index.html`. En prod (Apache o2switch) et dans `out/`, `/izy-reservation/` fonctionne.
+
+### Écriture (⚠️ vaut pour tout le texte publié)
+- **Aucun tiret cadratin (« — »).** C'est la ponctuation signature des textes générés par
+  une IA, et un lecteur qui la repère cesse de croire au reste. Écrire **un point** quand
+  la suite frappe, **une virgule** quand elle enchaîne, **deux-points** quand elle
+  explique, et **« · »** quand il ne s'agit que d'un séparateur (titres de page,
+  SIREN/SIRET, étapes de formulaire, pied de page). 35 remplacements le 29/07/2026.
+- **Le prompt système de l'assistant porte la même consigne** (`public/chatbot/chatbot.js`).
+  Sans elle, le modèle en replace à chaque réponse : c'est le seul texte du site que nous
+  n'écrivons pas nous-mêmes, et donc le seul qui peut réintroduire la faute tout seul.
+- Restent légitimes : les commentaires de code, le demi-cadratin des intervalles
+  (`14:00 – 14:30`), et `ÉTAPE 1/5 — PRESTATION` dans la maquette IzyRESA, recopié du
+  libellé réel de l'appli d'Adam.
+- Ponctuation française dans le HTML autonome : espace fine insécable (`&#8239;`) devant
+  `? ! ; %`, insécable (`&nbsp;`) devant `:` et `€`. Sans elles, sur une colonne de
+  téléphone, le point d'interrogation tombe seul sur sa ligne.
 
 ### Dév mobile / CSS (⚠️ important)
 - Site **desktop-first**. Corrections responsive dans un bloc `@media (max-width:767px)` **en fin** de `globals.css` (doit rester en fin : les règles custom sont non-layered, la dernière l'emporte à spécificité égale).
