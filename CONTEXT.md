@@ -25,7 +25,7 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 - Navigation & boutons tous reliés (pages ou modal contact)
 - Carousel avis Google (9 avis réels)
 - Chatbot Localizy intégré sur toutes les pages
-- Landing page **Izy Réservation** (`/izy-reservation/`), non reliée au site (accès par le lien uniquement)
+- Landing page **IzyRESA** (`/izy-reservation/`), non reliée au site (accès par le lien uniquement)
 - Déploiement automatique sur push vers main
 
 ### Fichiers clés
@@ -67,7 +67,7 @@ src/
 │   └── assets.ts
 public/
 ├── izy-reservation/
-│   └── index.html        # Landing Izy Réservation (HTML autonome, hors Next)
+│   └── index.html        # Landing IzyRESA (HTML autonome, hors Next)
 ├── chatbot/              # Widget chatbot Localizy
 │   ├── chatbot.js
 │   ├── chatbot.css
@@ -130,7 +130,7 @@ git add . && git commit -m "message" && git push
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
 
-### Landing Izy Réservation
+### Landing IzyRESA
 - Fichier unique `public/izy-reservation/index.html` : HTML/CSS/JS autonome (polices et images en base64), **volontairement hors du système de design Next** pour éviter toute collision avec `globals.css`.
 - Servie telle quelle par `output: "export"` (public/ est copié dans out/). URL : `/izy-reservation/`.
 - Aucun lien depuis le site (nav, footer, sitemap) → accessible uniquement par son lien. `<meta name="robots" content="noindex, follow">` pour qu'elle ne remonte pas non plus dans Google.
