@@ -18,7 +18,7 @@ const items = [
   {
     sticker: "megaphone",
     title: "Une équipe locale, experte et engagée",
-    body: "SEO, sites web, contenus, Google My Business… notre équipe réunit toutes les compétences pour booster votre présence en ligne. Déjà plus de 20 entreprises accompagnées avec succès — et la vôtre sera la prochaine.",
+    body: "SEO, sites web, contenus, Google My Business… notre équipe réunit toutes les compétences pour booster votre présence en ligne. Déjà plus de 20 entreprises accompagnées avec succès. Et la vôtre sera la prochaine.",
   },
 ];
 

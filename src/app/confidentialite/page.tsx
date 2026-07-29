@@ -3,7 +3,7 @@ import Link from "next/link";
 import LegalPage, { LegalSection } from "@/components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité — Localizy",
+  title: "Politique de confidentialité · Localizy",
   description:
     "Comment Localizy collecte, utilise et protège vos données personnelles : finalités, durées de conservation, destinataires et vos droits.",
 };
@@ -13,14 +13,14 @@ const sections: LegalSection[] = [
     title: "Responsable du traitement",
     body: [
       <>
-        Localizy — Eric Gomes, entrepreneur individuel (EI), 11 Allée des Bourgognes, 60500
+        Localizy, nom commercial d'Eric Gomes, entrepreneur individuel (EI), 11 Allée des Bourgognes, 60500
         Chantilly, France (SIREN 981 186 026), est responsable des traitements décrits ci-dessous.
         <br />
         Contact :{" "}
         <a href="mailto:contact@localizy.fr" className="legal-link">
           contact@localizy.fr
         </a>{" "}
-        — 07 81 18 94 24.
+        · 07 81 18 94 24.
       </>,
       "Aucun délégué à la protection des données (DPO) n'a été désigné : la nature et le volume des traitements réalisés ne l'imposent pas.",
     ],
@@ -39,10 +39,10 @@ const sections: LegalSection[] = [
   {
     title: "Finalités et bases légales",
     list: [
-      "Répondre à votre demande, vous rappeler et établir un devis — base légale : l'exécution de mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).",
-      "Assurer le suivi de la relation commerciale et contractuelle si une collaboration démarre — base légale : l'exécution du contrat.",
-      "Assurer la sécurité et le bon fonctionnement du site — base légale : notre intérêt légitime à maintenir un service fiable.",
-      "Respecter nos obligations comptables et fiscales — base légale : le respect d'une obligation légale.",
+      "Répondre à votre demande, vous rappeler et établir un devis. Base légale : l'exécution de mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).",
+      "Assurer le suivi de la relation commerciale et contractuelle si une collaboration démarre. Base légale : l'exécution du contrat.",
+      "Assurer la sécurité et le bon fonctionnement du site. Base légale : notre intérêt légitime à maintenir un service fiable.",
+      "Respecter nos obligations comptables et fiscales. Base légale : le respect d'une obligation légale.",
     ],
   },
   {
@@ -60,9 +60,9 @@ const sections: LegalSection[] = [
       "Vos données sont traitées par Localizy. Elles ne sont ni vendues, ni louées, ni transmises à des tiers à des fins de prospection. Seuls interviennent les prestataires techniques strictement nécessaires au fonctionnement du site :",
     ],
     list: [
-      "o2switch (France) — hébergement du site.",
-      "EmailJS (États-Unis) — acheminement vers notre boîte de réception des messages envoyés depuis le formulaire de contact et l'assistant.",
-      "jsDelivr (réseau de diffusion de contenu) — chargement de certaines ressources techniques du site.",
+      "o2switch (France) : hébergement du site.",
+      "EmailJS (États-Unis) : acheminement vers notre boîte de réception des messages envoyés depuis le formulaire de contact et l'assistant.",
+      "jsDelivr (réseau de diffusion de contenu) : chargement de certaines ressources techniques du site.",
     ],
   },
   {

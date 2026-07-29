@@ -78,7 +78,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>© 2026 Localizy — Fait dans l&apos;Oise avec ♥</span>
+        <span>© 2026 Localizy · Fait dans l&apos;Oise avec ♥</span>
         <span>localizy.fr</span>
       </div>
     </footer>

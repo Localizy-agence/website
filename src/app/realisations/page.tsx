@@ -96,7 +96,7 @@ export default function RealisationsPage() {
             Des projets qui <Underline>parlent</Underline> d&apos;eux-mêmes<span className="hero-accent">.</span>
           </h1>
           <p className="about-hero-lead" style={{ marginTop: "20px", maxWidth: "500px" }}>
-            Sites web, stratégies SEO, outils sur-mesure — découvrez comment nous avons accompagné des entreprises locales dans leur croissance digitale.
+            Sites web, stratégies SEO, outils sur-mesure : découvrez comment nous avons accompagné des entreprises locales dans leur croissance digitale.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
             <ContactButton>

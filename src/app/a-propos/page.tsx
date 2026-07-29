@@ -59,7 +59,7 @@ export default function AProposPage() {
           </h1>
           <p className="about-hero-lead" style={{ marginTop: "20px", maxWidth: "500px" }}>
             Localizy vous accompagne dans le développement de votre présence en ligne.
-            Sites web, SEO local, outils sur-mesure — le digital au service de votre croissance.
+            Sites web, SEO local, outils sur-mesure : le digital au service de votre croissance.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
             <ContactButton>

@@ -93,15 +93,20 @@
       "## RÈGLES DE CONVERSATION (impératives)\n" +
       "- Pose UNE SEULE question à la fois, jamais plus.\n" +
       "- Réponses courtes : 2 à 3 phrases maximum (une réaction + UNE question, OU une proposition de valeur + une proposition de rendez-vous).\n" +
-      "- Termine TOUJOURS ta réponse par une question OU une proposition de rendez-vous — JAMAIS par une simple affirmation.\n" +
+      "- Termine TOUJOURS ta réponse par une question OU une proposition de rendez-vous, JAMAIS par une simple affirmation.\n" +
       "- Avance pas à pas, ne jamais enchaîner ni lister plusieurs questions.\n" +
       "- Ton naturel et fluide, comme une vraie conversation.\n" +
-      "- Vouvoie systématiquement le prospect.\n\n" +
+      "- Vouvoie systématiquement le prospect.\n" +
+      // Sans cette consigne, le modèle place des tirets cadratins partout : c'est
+      // la ponctuation qui trahit un texte généré, et le prospect le sent.
+      "- N'utilise JAMAIS le tiret cadratin (—) ni le tiret demi-cadratin (–). " +
+      "Écris un point, une virgule ou deux-points selon ce que la phrase demande.\n" +
+      "- Ponctuation française : espace insécable avant ? ! ; et :\n\n" +
       "## QUALIFICATION PROGRESSIVE (dans cet ordre, une question à la fois)\n" +
       "1. Comprendre le BESOIN (type de projet)\n" +
       "2. Le CONTEXTE :\n" + quali + "\n" +
       "3. L'URGENCE (délais)\n" +
-      "4. Les COORDONNÉES — à la FIN seulement, jamais au début.\n" +
+      "4. Les COORDONNÉES : à la FIN seulement, jamais au début.\n" +
       "Ne JAMAIS demander l'email en premier (intrusif). Demander les " +
       "coordonnées seulement après avoir apporté de la valeur, et le formuler " +
       "comme un bénéfice (ex : \"Pour vous envoyer une proposition adaptée, " +
@@ -665,7 +670,7 @@
       if (/autre/i.test(label)) {
         appendMessage("user", cleanLabel(label), true);
         botAfter(function () {
-          appendMessage("bot", "Bien sûr ! Voici nos domaines d'expertise — lequel vous intéresse ?", true);
+          appendMessage("bot", "Bien sûr ! Voici nos domaines d'expertise. Lequel vous intéresse ?", true);
           showQuickReplies(allServiceChips());
         });
         return;
@@ -1583,7 +1588,7 @@
         email: email,
         telephone: phone,
         secteur: getSector(),
-        moment: (date ? date + " — " : "") + slot
+        moment: (date ? date + " · " : "") + slot
       }, function () {
         form.querySelectorAll("input, select, button").forEach(function (el) { el.disabled = true; });
         appendMessage("bot", "✅ Parfait " + firstName + " ! Votre demande de rendez-vous a bien été envoyée. Notre équipe vous contactera très prochainement.", true);

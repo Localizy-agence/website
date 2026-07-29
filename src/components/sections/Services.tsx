@@ -65,7 +65,7 @@ export default function Services() {
           sticker="cible"
           pill="SEO & GMB"
           title="Faites ressortir votre marque sur le web"
-          body="On améliore votre référencement naturel (SEO) et votre fiche Google My Business pour que vos clients vous trouvent facilement. Gagnez en visibilité locale et en crédibilité — sans passer des heures à comprendre l'algorithme."
+          body="On améliore votre référencement naturel (SEO) et votre fiche Google My Business pour que vos clients vous trouvent facilement. Gagnez en visibilité locale et en crédibilité, sans passer des heures à comprendre l'algorithme."
         />
         <ServiceCard
           sticker="fusee"

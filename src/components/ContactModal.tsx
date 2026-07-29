@@ -432,7 +432,7 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
                       margin: "0 0 4px",
                     }}
                   >
-                    Étape 1/3 — Vos coordonnées
+                    Étape 1/3 · Vos coordonnées
                   </p>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
@@ -519,7 +519,7 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
                       margin: "0 0 4px",
                     }}
                   >
-                    Étape 2/3 — Votre projet
+                    Étape 2/3 · Votre projet
                   </p>
 
                   <div>
@@ -639,7 +639,7 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
                       margin: "0 0 4px",
                     }}
                   >
-                    Étape 3/3 — Derniers détails
+                    Étape 3/3 · Derniers détails
                   </p>
 
                   <div>

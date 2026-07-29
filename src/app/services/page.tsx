@@ -15,9 +15,9 @@ const tabs = [
 ];
 
 const siteWebLivrables = [
-  { title: "Design sur-mesure", detail: "Maquette validée avant intégration — zéro surprise" },
+  { title: "Design sur-mesure", detail: "Maquette validée avant intégration : zéro surprise" },
   { title: "Intégration WordPress", detail: "Elementor + ACF, autonomie totale pour vous" },
-  { title: "SEO on-page inclus", detail: "Structure, balises, vitesse — prêt à ranker dès le lancement" },
+  { title: "SEO on-page inclus", detail: "Structure, balises, vitesse : prêt à ranker dès le lancement" },
   { title: "Responsive garanti", detail: "Mobile-first, testé sur tous les écrans" },
   { title: "Livraison en 3 semaines", detail: "Délai tenu, ou on vous en parle avant" },
 ];
@@ -40,7 +40,7 @@ const saasProducts = [
   {
     sticker: "megaphone",
     title: "Générateur d'articles SEO",
-    description: "Produisez du contenu optimisé, structuré et cohérent avec votre stratégie — sans rédiger ligne par ligne. Paramétrez votre cible, votre ton, vos mots-clés. Le reste est automatique.",
+    description: "Produisez du contenu optimisé, structuré et cohérent avec votre stratégie, sans rédiger ligne par ligne. Paramétrez votre cible, votre ton, vos mots-clés. Le reste est automatique.",
     replaces: "les heures de rédaction ou les prestataires trop chers.",
   },
   {
@@ -55,7 +55,7 @@ const reassuranceItems = [
   {
     sticker: "cible",
     title: "Pas de jargon, des résultats",
-    body: "On vous parle chiffres, pas techniques. Chaque action a un objectif mesurable — vous savez toujours où en est votre investissement.",
+    body: "On vous parle chiffres, pas techniques. Chaque action a un objectif mesurable : vous savez toujours où en est votre investissement.",
   },
   {
     sticker: "coeur",
@@ -65,7 +65,7 @@ const reassuranceItems = [
   {
     sticker: "fusee",
     title: "Construit pour durer",
-    body: "Sites maintenables, SEO pérenne, outils évolutifs. On ne vous rend pas dépendant de nous — et c'est voulu.",
+    body: "Sites maintenables, SEO pérenne, outils évolutifs. On ne vous rend pas dépendant de nous. Et c'est voulu.",
   },
 ];
 
@@ -149,7 +149,10 @@ export default function ServicesPageV2() {
         <div className="izy-hero-text">
           <div className="section-eyebrow">· Nos prestations ·</div>
           <h1 className="about-hero-headline" style={{ marginTop: "16px" }}>
-            Tout ce qu&apos;il faut pour <Underline>exister</Underline> — et gagner — en ligne<span className="hero-accent">.</span>
+            {/* Pas d'incise ici : `.underline-highlight` porte 0.08em de padding,
+                et une virgule collée juste après paraît décrochée du mot. La
+                phrase est plus forte sans l'incise de toute façon. */}
+            Tout ce qu&apos;il faut pour <Underline>exister</Underline> et gagner en ligne<span className="hero-accent">.</span>
           </h1>
           <p className="about-hero-lead" style={{ marginTop: "20px", maxWidth: "500px" }}>
             Sites web qui convertissent. Visibilité locale qui attire. Outils qui automatisent.
@@ -239,7 +242,7 @@ export default function ServicesPageV2() {
             </p>
 
             <div className="services-pour-qui-v2">
-              <strong>Pour qui :</strong> PME, artisans, cabinets, commerces — vous avez un business qui tourne, votre site doit être à la hauteur.
+              <strong>Pour qui :</strong> PME, artisans, cabinets, commerces : vous avez un business qui tourne, votre site doit être à la hauteur.
             </div>
 
             <div className="services-stats-row">
