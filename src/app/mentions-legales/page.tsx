@@ -78,9 +78,9 @@ const sections: LegalSection[] = [
     ],
   },
   {
-    title: "Cookies",
+    title: "Cookies et mesure d'audience",
     body: [
-      "Ce site n'utilise aucun cookie publicitaire, aucun traceur de mesure d'audience et aucun outil de suivi tiers. Aucun bandeau de consentement n'est donc nécessaire.",
+      "Ce site n'utilise aucun cookie publicitaire et aucun outil de suivi publicitaire. Nous mesurons la fréquentation de nos pages avec Cloudflare Web Analytics, qui ne dépose aucun cookie, n'écrit rien sur votre appareil et ne permet pas de vous identifier. Aucun bandeau de consentement n'est donc nécessaire.",
       "Seuls des espaces de stockage strictement fonctionnels du navigateur (stockage local et de session) sont utilisés, pour conserver le fil d'une conversation avec l'assistant le temps de votre visite. Ces données restent sur votre appareil et peuvent être effacées à tout moment depuis les réglages de votre navigateur.",
     ],
   },
