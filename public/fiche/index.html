@@ -83,6 +83,11 @@ input,select,textarea{
   background:var(--paper);min-height:46px;
 }
 input:focus,select:focus,textarea:focus{outline:2px solid var(--lav);outline-offset:1px;border-color:var(--lav)}
+input.faux,textarea.faux{border-color:var(--red-dark);background:#FFF7F7}
+section.prio input.faux{background:rgba(255,107,107,.12);border-color:#FF9B9B}
+.erreur{display:block;font-size:13px;color:var(--red-dark);margin-top:6px;line-height:1.4;font-weight:500}
+section.prio .erreur{color:#FFB3B3}
+.ok-mini{display:block;font-size:13px;color:var(--ok);margin-top:6px;font-weight:500}
 input::placeholder{color:#9AA3B2}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
 .duo>.champ{display:flex;flex-direction:column;margin-bottom:0}
@@ -569,6 +574,117 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     });
   });
 
+  /* ─── Vérification des champs ─── */
+  // Chaque règle NORMALISE puis VÉRIFIE. Normaliser d'abord évite de refuser
+  // une saisie juste mais mal espacée : un artisan écrit « 06 12 34 56 78 » et
+  // « 852 147 963 00018 », c'est à nous de nous adapter, pas à lui.
+
+  // Clé de Luhn du SIRET : elle attrape un chiffre faux ou deux chiffres
+  // intervertis, ce qu'un simple comptage à 14 laisse passer.
+  function luhnOk(n){
+    var somme = 0;
+    for (var i = 0; i < n.length; i++){
+      var c = Number(n[n.length - 1 - i]);
+      if (i % 2 === 1){ c *= 2; if (c > 9) c -= 9; }
+      somme += c;
+    }
+    return somme % 10 === 0;
+  }
+
+  var REGLES = {
+    email_notification: {
+      norme: function(v){ return v.trim().toLowerCase(); },
+      test: function(v){ return !v || /^[^\s@]+@[^\s@.]+\.[^\s@]{2,}$/.test(v); },
+      dit: "Cette adresse ne ressemble pas à un email. Vérifiez l'arobase et le point."
+    },
+    telephone: {
+      norme: function(v){
+        var n = v.replace(/[^\d+]/g, '').replace(/^\+33/, '0');
+        return n.length === 10 ? n.replace(/(\d{2})(?=\d)/g, '$1 ').trim() : v.trim();
+      },
+      test: function(v){ var n = v.replace(/\D/g, ''); return !v || (n.length === 10 && n[0] === '0'); },
+      dit: "Un numéro français fait 10 chiffres et commence par 0."
+    },
+    siret: {
+      norme: function(v){ return v.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{0,5})/, '$1 $2 $3 $4').trim(); },
+      test: function(v){
+        var n = v.replace(/\D/g, '');
+        if (!n) return true;
+        if (n.length !== 14) return false;
+        // La Poste est la seule exception connue à la clé de Luhn.
+        if (n.slice(0, 9) === '356000000') return true;
+        return luhnOk(n);
+      },
+      dit: "Ce SIRET n'est pas valide. Il fait 14 chiffres et se trouve sur vos factures ou votre avis INSEE."
+    },
+    domaine: {
+      norme: function(v){ return v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, ''); },
+      test: function(v){ return !v || /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9-]+)+$/.test(v); },
+      dit: "Écrivez juste le nom, sans https:// ni barre oblique. Par exemple votreenseigne.fr"
+    }
+  };
+
+  function messageErreur(champ, texte){
+    var ex = champ.parentNode.querySelector('.erreur');
+    if (texte){
+      if (!ex){ ex = document.createElement('span'); ex.className = 'erreur';
+        ex.setAttribute('role','alert'); champ.parentNode.appendChild(ex); }
+      ex.textContent = texte;
+      champ.classList.add('faux');
+      champ.setAttribute('aria-invalid','true');
+    } else {
+      if (ex) ex.remove();
+      champ.classList.remove('faux');
+      champ.removeAttribute('aria-invalid');
+    }
+  }
+
+  function verifier(champ){
+    var r = REGLES[champ.name]; if (!r) return true;
+    // La normalisation ne s'applique qu'en sortie de champ : réécrire pendant
+    // la frappe déplace le curseur et rend la saisie infernale.
+    if (document.activeElement !== champ && r.norme) champ.value = r.norme(champ.value);
+    var bon = r.test(champ.value);
+    messageErreur(champ, bon ? '' : r.dit);
+    return bon;
+  }
+
+  Object.keys(REGLES).forEach(function(nom){
+    var c = form.querySelector('[name="' + nom + '"]'); if (!c) return;
+    c.addEventListener('blur', function(){ verifier(c); majuscule(); });
+    // Une erreur affichée disparaît dès que la saisie reprend : la laisser
+    // pendant la correction donne l'impression d'un formulaire qui gronde.
+    c.addEventListener('input', function(){ if (c.classList.contains('faux')) messageErreur(c, ''); });
+  });
+
+  /* ─── Cohérence des horaires et des prestations ─── */
+  function verifierJour(d){
+    var deb = d.querySelector('[data-h=debut]'), fin = d.querySelector('[data-h=fin]');
+    var mauvais = !d.classList.contains('ferme') && deb.value && fin.value && fin.value <= deb.value;
+    messageErreur(fin, mauvais ? 'La fermeture doit être après l\'ouverture.' : '');
+    return !mauvais;
+  }
+  zoneJours.addEventListener('change', function(e){
+    var d = e.target.closest('.jour'); if (d) verifierJour(d);
+  });
+
+  function toutVerifier(){
+    var ok = true;
+    Object.keys(REGLES).forEach(function(nom){
+      var c = form.querySelector('[name="' + nom + '"]');
+      if (c && !verifier(c)) ok = false;
+    });
+    zoneJours.querySelectorAll('.jour').forEach(function(d){ if (!verifierJour(d)) ok = false; });
+    zonePresta.querySelectorAll('.presta').forEach(function(p){
+      var nom = p.querySelector('[data-p=nom]'), du = p.querySelector('[data-p=duree]');
+      if (!nom.value.trim() || p.classList.contains('devis')) { messageErreur(du, ''); return; }
+      var mauvais = !du.value || Number(du.value) <= 0;
+      messageErreur(du, mauvais ? 'Indiquez une durée, ou cochez « sur devis ».' : '');
+      if (mauvais) ok = false;
+    });
+    return ok;
+  }
+
   /* ─── Sauvegarde locale ─── */
   var tempo, badge = document.getElementById('sauve');
   function etat(){
@@ -648,6 +764,13 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     faut(!e.prestations.filter(function(p){ return p.nom.trim(); }).length, 'vos prestations', '#prestations [data-p=nom]');
     faut(!e.champs.siret, 'votre SIRET', '#siret');
     faut(!e.champs.responsable, 'le responsable', '#responsable');
+    // Un champ rempli mais invalide compte comme manquant : sinon la jauge
+    // affiche 100 % sur un SIRET faux, et le user découvre l'erreur au montage.
+    Object.keys(REGLES).forEach(function(nom){
+      var c = form.querySelector('[name="' + nom + '"]');
+      if (c && c.value && !REGLES[nom].test(c.value) && !m.some(function(x){ return x.sel === '#' + c.id; }))
+        m.push({ texte: 'un ' + (nom === 'siret' ? 'SIRET' : nom === 'telephone' ? 'téléphone' : nom === 'domaine' ? 'domaine' : 'email') + ' valide', sel: '#' + c.id });
+    });
     return m;
   }
   function allerA(sel){
@@ -812,6 +935,15 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
 
   bouton.addEventListener('click', function(){
+    // Une saisie fautive bloque TOUJOURS, contrairement à un champ vide qu'on
+    // peut décider de laisser de côté. Une donnée fausse coûte plus cher qu'une
+    // donnée absente : elle se découvre au montage, ou pire, en production.
+    if (!toutVerifier()){
+      var faux = form.querySelector('.faux');
+      alerte('err', 'Une information ne semble pas correcte. Corrigez-la avant d\'envoyer.');
+      if (faux) allerA('#' + faux.id || '.faux');
+      return;
+    }
     var m = manquants();
     if (m.length){
       alerte('err', 'Il manque encore&nbsp;: <b>' + m.map(function(x){ return x.texte; }).join(', ') + '</b>. ' +
