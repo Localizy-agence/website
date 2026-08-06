@@ -13,7 +13,7 @@
 :root{
   --navy-deep:#233142;--navy:#31445E;--lav:#9699CE;--lav-soft:#BABBDE;
   --red:#FF6B6B;--red-dark:#DC5B5B;--paper:#fff;--mist:#F4F5F9;
-  --line:#DDE0EA;--muted:#6B7689;--ok:#2E9E7B;
+  --line:#DDE0EA;--muted:#5E6878;--ok:#1F7658;
   --r-card:12px;--r-pill:9999px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -64,11 +64,12 @@ section.prio label{color:#fff}
 section.prio .aide{color:#A9B2C4}
 section.prio input,section.prio select{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.3);color:#fff}
 section.prio input::placeholder{color:#8894A8}
-section.prio .radio{border-color:rgba(255,255,255,.3);color:#E3E7F0}
-section.prio .radio.on{background:var(--red);border-color:var(--red);color:#fff}
+section.prio .radio{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.38);color:#fff}
+section.prio .bascule{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.38);color:#fff}
+section.prio .radio.on{background:var(--lav-soft);border-color:var(--lav-soft);color:var(--navy-deep);font-weight:600}
 
 h2{font-size:21px;margin-bottom:6px;display:flex;align-items:baseline;gap:9px}
-h2 .num{color:var(--lav);font-size:17px;flex:none}
+h2 .num{color:#5F63A8;font-size:17px;flex:none}
 .intro{font-size:14.5px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 
 /* ── Champs ── */
@@ -173,11 +174,11 @@ details[open] summary{border-bottom:1.5px solid var(--line)}
 .pied .wrap{display:flex;gap:12px;align-items:center;padding-block:13px}
 .pied .reste{flex:1;font-size:13.5px;color:var(--muted);line-height:1.35}
 .envoyer{
-  background:var(--red);color:#fff;border:0;border-radius:var(--r-pill);
-  font:inherit;font-size:16px;font-weight:600;padding:14px 26px;cursor:pointer;
+  background:var(--red-dark);color:#fff;border:0;border-radius:var(--r-pill);
+  font:inherit;font-size:19px;font-weight:700;padding:13px 26px;cursor:pointer;
   min-height:52px;flex:none;transition:transform .12s,background .15s;
 }
-.envoyer:hover{background:var(--red-dark)}
+.envoyer:hover{background:#C44E4E}
 .envoyer:active{transform:scale(.97)}
 .envoyer:disabled{opacity:.55;cursor:default;transform:none}
 
