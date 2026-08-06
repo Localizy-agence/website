@@ -26,6 +26,7 @@ body{
 h1,h2,h3{font-family:'Clash Display',Georgia,serif;letter-spacing:-.02em;word-spacing:.14em;font-weight:600}
 
 .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+section,.champ,#jours,#prestations,.presta{scroll-margin-top:76px}
 
 /* ── Barre de progression, collée en haut ── */
 .barre{
@@ -42,7 +43,7 @@ h1,h2,h3{font-family:'Clash Display',Georgia,serif;letter-spacing:-.02em;word-sp
 /* ── En-tête ── */
 header.hero{background:var(--navy-deep);color:#fff;padding:34px 0 30px;margin-bottom:22px}
 header.hero .logo{height:26px;margin-bottom:20px;display:block}
-.eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:10px}
+.eyebrow{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:10px}
 header.hero .eyebrow{color:var(--lav-soft)}
 header.hero h1{font-size:29px;line-height:1.12;margin-bottom:12px}
 header.hero p{color:#D6DAE6;font-size:16px;max-width:52ch}
@@ -73,7 +74,7 @@ h2 .num{color:#5F63A8;font-size:17px;flex:none}
 .intro{font-size:14.5px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 
 /* ── Champs ── */
-.champ{margin-bottom:17px}
+.champ{margin-bottom:16px}
 label{display:block;font-size:15px;font-weight:600;margin-bottom:7px}
 .aide{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:3px;line-height:1.45}
 input,select,textarea{
@@ -83,14 +84,17 @@ input,select,textarea{
 }
 input:focus,select:focus,textarea:focus{outline:2px solid var(--lav);outline-offset:1px;border-color:var(--lav)}
 input::placeholder{color:#9AA3B2}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+.duo>.champ{display:flex;flex-direction:column;margin-bottom:0}
+.duo>.champ label{flex:1}
+.duo{margin-bottom:16px}
 @media(max-width:560px){.duo{grid-template-columns:1fr}}
 
 /* ── Choix ── */
 .choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .radio{
   border:1.5px solid var(--line);border-radius:var(--r-pill);
-  padding:9px 16px;font-size:14.5px;cursor:pointer;background:var(--paper);
+  padding:8px 16px;font-size:14.5px;cursor:pointer;background:var(--paper);
   min-height:44px;display:inline-flex;align-items:center;
   transition:background .15s,border-color .15s;user-select:none;
 }
@@ -100,11 +104,11 @@ input::placeholder{color:#9AA3B2}
 /* ── Horaires ── */
 .jour{
   display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;
-  padding:9px 0;border-bottom:1px solid var(--line);
+  padding:8px 0;border-bottom:1px solid var(--line);
 }
 .jour:last-child{border-bottom:0}
 .jour b{font-size:14.5px;font-weight:600}
-.jour .heures{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+.jour .heures{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;max-width:400px}
 .jour input{padding:9px 10px;min-height:44px;font-size:15px}
 .jour.ferme .heures input{opacity:.32;pointer-events:none}
 .bascule{
@@ -125,8 +129,8 @@ input::placeholder{color:#9AA3B2}
 }
 .presta .haut{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
 .presta .haut input{flex:1}
-.presta .bas{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:center}
-@media(max-width:560px){.presta .bas{grid-template-columns:1fr 1fr;gap:9px}.presta .bas .radio{grid-column:1/-1}}
+.presta .bas{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+@media(max-width:560px){.presta .bas{grid-template-columns:1fr 1fr;gap:8px}.presta .bas .radio{grid-column:1/-1}}
 .presta.devis .num-only{opacity:.32;pointer-events:none}
 .retirer{
   border:0;background:transparent;color:var(--muted);font:inherit;font-size:22px;
@@ -143,7 +147,7 @@ input::placeholder{color:#9AA3B2}
 /* ── Encadrés ── */
 .note{
   background:#F0F1F8;border-left:3px solid var(--lav);border-radius:8px;
-  padding:13px 15px;font-size:14px;line-height:1.5;margin-top:14px;
+  padding:12px 16px;font-size:14px;line-height:1.5;margin-top:16px;
 }
 .note b{font-weight:600}
 section.prio .note{background:rgba(255,255,255,.07);border-left-color:var(--lav-soft);color:#D6DAE6}
@@ -160,9 +164,9 @@ summary::after{content:'Modifier';font-weight:400;color:var(--lav);font-size:13.
 details[open] summary::after{content:'Replier'}
 details[open] summary{border-bottom:1.5px solid var(--line)}
 .reglages{padding:15px}
-.reglage{display:grid;grid-template-columns:1fr 118px;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.reglage{display:grid;grid-template-columns:1fr 118px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
 .reglage:last-child{border-bottom:0}
-.reglage span{font-size:14.5px}
+.reglage label{font-size:14.5px;font-weight:400;margin-bottom:0}
 .reglage input,.reglage select{padding:9px 10px;min-height:44px;font-size:15px}
 
 /* ── Pied d'action ── */
@@ -219,7 +223,13 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     <h1>Ce dont j'ai besoin pour construire votre application</h1>
     <p>Remplissez ce formulaire une seule fois, et je m'occupe du reste. Vos réponses
        s'enregistrent au fur et à mesure : vous pouvez fermer la page et revenir plus tard.</p>
-    <span class="duree">⏱ Une dizaine de minutes</span>
+    <span class="duree">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+      </svg>
+      Une dizaine de minutes
+    </span>
   </div>
 </header>
 
@@ -295,7 +305,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <p class="intro">Marquez « Fermé » les jours où vous n'ouvrez pas : ils n'apparaîtront pas dans l'appli.</p>
   <div id="jours"></div>
   <button type="button" class="ajouter" id="copier-horaires" hidden>
-    ⇊ Appliquer ces horaires aux autres jours
+    Appliquer ces horaires aux autres jours
   </button>
 
   <div class="champ" style="margin-top:18px">
@@ -360,16 +370,16 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <details>
     <summary>Réglages recommandés, déjà remplis</summary>
     <div class="reglages">
-      <div class="reglage"><span>Les rendez-vous tombent toutes les</span>
-        <select name="grille"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 heure</option></select></div>
-      <div class="reglage"><span>Battement entre deux rendez-vous</span>
-        <select name="buffer"><option value="0" selected>aucun</option><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option></select></div>
-      <div class="reglage"><span>On peut réserver jusqu'à</span>
-        <select name="max_jours"><option value="30">1 mois</option><option value="60" selected>2 mois</option><option value="90">3 mois</option></select></div>
-      <div class="reglage"><span>On peut réserver pour dans l'heure</span>
-        <select name="min_heures"><option value="0" selected>oui</option><option value="2">2 h avant mini</option><option value="24">la veille mini</option></select></div>
-      <div class="reglage"><span>Un client peut annuler seul jusqu'à</span>
-        <select name="annul_heures"><option value="2" selected>2 h avant</option><option value="6">6 h avant</option><option value="24">24 h avant</option></select></div>
+      <div class="reglage"><label for="r_grille">Les rendez-vous tombent toutes les</label>
+        <select id="r_grille" name="grille"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 heure</option></select></div>
+      <div class="reglage"><label for="r_buffer">Battement entre deux rendez-vous</label>
+        <select id="r_buffer" name="buffer"><option value="0" selected>aucun</option><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option></select></div>
+      <div class="reglage"><label for="r_max_jours">On peut réserver jusqu'à</label>
+        <select id="r_max_jours" name="max_jours"><option value="30">1 mois</option><option value="60" selected>2 mois</option><option value="90">3 mois</option></select></div>
+      <div class="reglage"><label for="r_min_heures">On peut réserver pour dans l'heure</label>
+        <select id="r_min_heures" name="min_heures"><option value="0" selected>oui</option><option value="2">2 h avant mini</option><option value="24">la veille mini</option></select></div>
+      <div class="reglage"><label for="r_annul_heures">Un client peut annuler seul jusqu'à</label>
+        <select id="r_annul_heures" name="annul_heures"><option value="2" selected>2 h avant</option><option value="6">6 h avant</option><option value="24">24 h avant</option></select></div>
     </div>
   </details>
 </section>
@@ -413,6 +423,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <h2><span class="num">9</span>Autre chose ?</h2>
   <p class="intro">Une question, une particularité de votre organisation, une envie. Tout ce
      qui n'entrait dans aucune case au-dessus.</p>
+  <label for="mot" class="sr">Votre message</label>
   <textarea id="mot" name="mot" rows="4" placeholder="Je ferme le midi de 12h à 14h…"></textarea>
 </section>
 
@@ -513,7 +524,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
       return d !== src && !d.classList.contains('ferme') && !d.querySelector('[data-h=debut]').value;
     });
     boutonCopie.hidden = !reste;
-    if (src) boutonCopie.textContent = '⇊ Appliquer les horaires du ' + src.dataset.jour + ' aux autres jours';
+    if (src) boutonCopie.textContent = 'Appliquer les horaires du ' + src.dataset.jour + ' aux autres jours';
   }
   boutonCopie.addEventListener('click', function(){
     var src = premierRempli(); if (!src) return;
