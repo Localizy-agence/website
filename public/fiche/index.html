@@ -280,6 +280,19 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <p class="intro">Ce qui s'affichera dans l'appli et sur les messages envoyés à vos clients.</p>
 
   <div class="champ">
+    <label>Votre métier</label>
+    <div class="choix" data-radio="metier">
+      <span class="radio" data-val="Barbier">Barbier</span>
+      <span class="radio" data-val="Coiffure">Coiffure</span>
+      <span class="radio" data-val="Ongles">Ongles</span>
+      <span class="radio" data-val="Massage">Massage</span>
+      <span class="radio" data-val="Esthétique">Esthétique</span>
+      <span class="radio" data-val="Tatouage">Tatouage</span>
+      <span class="radio" data-val="Autre">Autre</span>
+    </div>
+  </div>
+
+  <div class="champ">
     <label for="nom">Le nom de votre enseigne <span class="aide">Exactement comme il doit s'écrire, majuscules comprises.</span></label>
     <input id="nom" name="nom" enterkeyhint="next" autocapitalize="words" placeholder="Le Comptoir de Léa" autocomplete="organization" />
   </div>
@@ -739,23 +752,64 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
   function recap(){
     var e = etat(), c = e.champs, L = [];
-    L.push('=== FICHE CLIENT IZYRESA ===', '');
-    L.push('Enseigne : ' + (c.nom || '—'));
-    L.push('Mail     : ' + (c.email_notification || '—'));
-    L.push('Tél      : ' + (c.telephone || '—'));
-    L.push('Adresse  : ' + (c.adresse || '—'));
+    var ou = function(v){ return v && String(v).trim() ? v : '—'; };
+
+    if (c.mot) { L.push('SON MESSAGE', c.mot, ''); }
+
+    L.push('━━ FICHE CLIENT IZYRESA ━━', '');
+    L.push('Métier   : ' + ou(e.radios.metier));
+    L.push('Enseigne : ' + ou(c.nom));
+    L.push('Contact  : ' + ou(c.email_notification) + ' · ' + ou(c.telephone));
+    L.push('Adresse  : ' + ou(c.adresse));
     L.push('');
-    L.push('Domaine  : ' + (c.domaine || '—') + (c.domaine_chez ? '  (chez ' + c.domaine_chez + ')' : ''));
-    L.push('Mail au domaine : ' + (e.radios.a_mail || '—'));
-    L.push('Logo     : ' + (e.radios.a_logo || '—'));
+
+    L.push('━━ CE QUI DÉCIDE DE LA DATE ━━');
+    L.push('Domaine        : ' + ou(c.domaine) + (c.domaine_chez ? '  (chez ' + c.domaine_chez + ')' : ''));
+    L.push('Mail au domaine: ' + ou(e.radios.a_mail));
+    L.push('Logo           : ' + ou(e.radios.a_logo));
     L.push('');
-    L.push('Légal    : ' + (c.raison_sociale || '—') + ' · ' + (c.forme || '—') +
-           ' · SIRET ' + (c.siret || '—') + ' · resp. ' + (c.responsable || '—'));
-    L.push('Reprise clients : ' + (e.radios.reprise || '—'));
-    if (c.mot) L.push('', 'MOT DE LA FIN :', c.mot);
-    L.push('', '--- JSON pour nouveau-client.js ---', JSON.stringify(json(), null, 1));
+
+    // Horaires et prestations en clair : ils sont dans le JSON, mais le JSON ne
+    // se lit pas sur un téléphone entre deux clients.
+    L.push('━━ HORAIRES ━━');
+    var ouvert = false;
+    JOURS.forEach(function(j){
+      var d = e.jours[j] || {};
+      if (d.ferme || !d.debut) { L.push('  ' + j.padEnd(10) + ' fermé'); return; }
+      ouvert = true;
+      L.push('  ' + j.padEnd(10) + d.debut + ' → ' + (d.fin || '?'));
+    });
+    if (!ouvert) L.push('  (aucun jour renseigné)');
+    if (c.dernier) L.push('  dernier RDV possible à ' + c.dernier);
+    L.push('');
+
+    L.push('━━ PRESTATIONS ━━');
+    var pr = e.prestations.filter(function(p){ return p.nom.trim(); });
+    if (!pr.length) L.push('  (aucune)');
+    pr.forEach(function(p, n){
+      L.push('  ' + (n + 1) + '. ' + p.nom.trim() +
+        (p.devis ? '  — sur devis' : '  — ' + (p.duree || '?') + ' min · ' + (p.prix || '?') + ' €'));
+    });
+    if (c.produits) L.push('  Produits : ' + c.produits);
+    L.push('');
+
+    L.push('━━ LÉGAL ━━');
+    L.push('  ' + ou(c.raison_sociale) + ' · ' + ou(c.forme));
+    L.push('  SIRET : ' + ou(c.siret) + ' · responsable : ' + ou(c.responsable));
+    L.push('  Reprise du fichier clients : ' + ou(e.radios.reprise));
+    if (c.instagram || c.tiktok) L.push('  Réseaux : ' + [c.instagram, c.tiktok].filter(Boolean).join(' · '));
+    L.push('');
+
+    var m = manquants();
+    L.push('━━ CE QUI MANQUE ENCORE ━━');
+    L.push(m.length ? '  ' + m.map(function(x){ return x.texte; }).join(', ') : '  rien, la fiche est complète');
+    L.push('');
+
+    L.push('━━ JSON POUR nouveau-client.js ━━');
+    L.push(JSON.stringify(json(), null, 1));
     return L.join('\n');
   }
+
 
   bouton.addEventListener('click', function(){
     var m = manquants();
@@ -773,13 +827,19 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     bouton.disabled = true; bouton.innerHTML = 'Envoi…';
     var c = etat().champs;
     var params = {
-      prenom: 'Non renseigné', nom: c.responsable || 'Non renseigné',
-      email: c.email_notification || '', telephone: c.telephone || 'Non renseigné',
-      entreprise: c.nom || 'Non renseigné', secteur: 'Non renseigné',
+      prenom: (c.responsable || '').trim().split(/\s+/)[0] || '—',
+      nom: c.responsable || '—',
+      email: c.email_notification || '', telephone: c.telephone || '—',
+      entreprise: c.nom || '—',
+      secteur: etat().radios.metier || '—',
       type_demande: 'IzyRESA — fiche client remplie',
-      site_existant: c.domaine || 'Non renseigné',
-      besoin_saas: 'IzyRESA', budget: 'Non renseigné', delai: 'Non renseigné',
-      disponibilite: 'Non renseigné', besoin: c.mot || 'Aucun message',
+      site_existant: c.domaine || '—',
+      besoin_saas: 'IzyRESA',
+      // Ces trois libellés viennent du formulaire de contact du site et n'ont
+      // pas de sens sur une fiche remplie. Un tiret vaut mieux que « Non
+      // renseigné », qui se lit comme une information manquante.
+      budget: '—', delai: '—', disponibilite: '—',
+      besoin: recap(),
       date: new Date().toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}),
       name: 'Fiche client IzyRESA',
       conversation_complete: recap()
