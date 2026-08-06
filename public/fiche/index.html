@@ -396,7 +396,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
       <input id="forme" name="forme" autocomplete="off" /></div>
   </div>
   <div class="duo">
-    <div class="champ"><label for="siret">Numéro SIRET</label>
+    <div class="champ"><label for="siret">Numéro SIRET <span class="aide">Obligatoire sur les mentions légales de tout site professionnel. Il figure sur vos factures et sur votre avis de situation INSEE.</span></label>
       <input id="siret" name="siret" inputmode="numeric" enterkeyhint="next" autocomplete="off" autocomplete="off" /></div>
     <div class="champ"><label for="responsable">Nom et prénom du responsable</label>
       <input id="responsable" name="responsable" autocapitalize="words" enterkeyhint="done" autocomplete="name" /></div>
@@ -694,7 +694,12 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
       admin: { email: c.email_notification || '', motdepasse: 'à-remplir' },
       smtp: { host: '', port: 465, secure: true, user: c.email_notification || '', motdepasse: 'à-remplir' },
       backup_email: c.email_notification || '',
-      legal: { responsable: c.responsable || '' },
+      legal: {
+        responsable: c.responsable || '',
+        raison_sociale: c.raison_sociale || '',
+        forme: c.forme || '',
+        siret: (c.siret || '').replace(/\s/g, '')
+      },
       horaires: horaires,
       services: services,
       produits_optionnels: (c.produits || '').split(',').map(function(x){ return x.trim(); }).filter(Boolean),
