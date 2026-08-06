@@ -214,7 +214,7 @@
   .marque figcaption{font-size:13.5px;color:var(--grey-500);text-align:center;line-height:1.5;}
   .marque figcaption b{color:var(--navy);}
   .mq-live{display:inline-block;margin-left:4px;background:rgba(79,178,134,.14);color:var(--success);
-    font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);text-transform:uppercase;letter-spacing:.04em;}
+    font-size:12px;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);text-transform:uppercase;letter-spacing:.04em;}
   .marque-note{margin-top:38px;text-align:center;color:var(--grey-600);font-size:16px;line-height:1.6;
     max-width:64ch;margin-inline:auto;}
   .marque-note b{color:var(--navy-deep);}
@@ -344,6 +344,17 @@
   .pay-offert .pay-prix{color:var(--success);}
   .pay-offert .pay-prix span{color:var(--success);opacity:.6;}
   .pay-fleche{align-self:center;font-size:22px;color:var(--grey-300);flex:0 0 auto;}
+  /* Tout appareil tactile, quelle que soit sa largeur : une tablette en
+     paysage dépasse 820 px et restait sur des cibles de 20 px. */
+  @media (pointer: coarse){
+    header.site .hlink,
+    footer.site .fcol a,
+    footer.site .legal a,
+    footer.site .site-link,
+    .proof .row a{ min-height:44px; display:inline-flex; align-items:center; }
+    footer.site .fcol a{ display:flex; }
+  }
+
   @media(max-width:820px){.pay-fleche{transform:rotate(90deg);}}
   .pay-punch{margin-top:26px;text-align:center;font-family:var(--font-display);font-weight:600;
     font-size:clamp(18px,2.3vw,24px);color:var(--navy-deep);line-height:1.35;text-wrap:balance;}
@@ -430,7 +441,7 @@
   footer.site .site-link .arw{transition:transform .18s var(--ease);}
   footer.site .site-link:hover{color:#fff;}
   footer.site .site-link:hover .arw{transform:translateX(3px);}
-  footer.site .base{border-top:1px solid rgba(255,255,255,.1);margin-top:36px;padding-top:20px;font-size:13px;color:#7d8296;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  footer.site .base{border-top:1px solid rgba(255,255,255,.1);margin-top:36px;padding-top:20px;font-size:13px;color:#98A0B4;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 
   /* Izy floating assistant */
   .izy-fab{position:fixed;right:20px;bottom:20px;z-index:60;width:64px;height:64px;border-radius:var(--r-pill);
@@ -651,7 +662,7 @@
   .form-rgpd{font-size:12.5px;color:var(--grey-500);line-height:1.5;margin-top:-2px;}
 
   footer.site .legal{display:flex;gap:16px;flex-wrap:wrap;}
-  footer.site .legal a{color:#7d8296;}
+  footer.site .legal a{color:#98A0B4;}
   footer.site .legal a:hover{color:#fff;}
 
 
@@ -740,10 +751,9 @@
        complets) : conçue pour une ligne, elle passe à deux sur 335 px et le
        rond devient une tache. On la remet en étiquette rectangulaire. */
     .prob-card .tag{border-radius:var(--r-md);line-height:1.4;padding:7px 12px;}
-    .mq-live{font-size:12px;}
     /* Trois liens de 44 px empilés bord à bord : la cible voisine commence là
        où la précédente finit, sans marge d'erreur pour le pouce. */
-    footer.site .fcol a{margin-bottom:4px;}
+    footer.site .fcol a{margin-bottom:8px;}
     .marque-note{margin-top:26px;}
     .case-quote{margin-top:26px;}
     .case-cta{margin-top:26px;}
@@ -1097,7 +1107,7 @@
       </div>
       <div class="guarantee">
         <span class="ic">✓</span>
-        <p><b>Vous ne prenez aucun risque.</b> Vous réglez <b>30&#8239;% à la commande</b> pour lancer, et le reste seulement quand votre appli est en ligne et que vous validez. Pas convaincu à la livraison&#8239;? On retravaille, ou on vous rembourse l'acompte.</p>
+        <p><b>Vous validez avant de payer le solde.</b> Vous réglez <b>30&#8239;% à la commande</b> pour lancer, et le reste seulement quand votre appli est en ligne et que vous validez. Pas convaincu à la livraison&#8239;? On retravaille.</p>
       </div>
     </div>
   </section>
@@ -1213,7 +1223,7 @@
         </details>
         <details>
           <summary>Et si le résultat ne me plaît pas&#8239;? <span class="pm">+</span></summary>
-          <div class="a">Vous ne réglez le solde qu'une fois l'appli en ligne et validée par vous. Pas convaincu&#8239;? On retravaille, ou on vous rembourse l'acompte.</div>
+          <div class="a">Vous ne réglez le solde qu'une fois l'appli en ligne et validée par vous. Pas convaincu&#8239;? On retravaille.</div>
         </details>
         <details>
           <summary>Ça prend combien de temps&#8239;? <span class="pm">+</span></summary>
