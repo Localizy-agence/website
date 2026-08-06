@@ -194,6 +194,10 @@ details[open] summary{border-bottom:1.5px solid var(--line)}
 
 footer.bas{padding:26px 0 8px;text-align:center;font-size:13.5px;color:var(--muted)}
 footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:44px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -220,7 +224,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
 <form id="fiche" class="wrap" novalidate>
 
-<div id="alertes"></div>
+<div id="alertes" role="alert" aria-live="assertive"></div>
 
 <!-- ═══ PRIORITÉ ═══ -->
 <section class="prio">
@@ -231,8 +235,8 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
   <div class="champ">
     <label for="domaine">1. Avez-vous déjà une adresse internet ?
-      <span class="aide">Par exemple monsalon.fr. Si vous n'en avez pas, écrivez le nom qui vous plairait, je m'occupe de la réserver.</span></label>
-    <input id="domaine" name="domaine" placeholder="monsalon.fr" autocomplete="off" />
+      <span class="aide">Par exemple votreenseigne.fr. Si vous n'en avez pas, écrivez le nom qui vous plairait, je m'occupe de la réserver.</span></label>
+    <input id="domaine" name="domaine" inputmode="url" enterkeyhint="next" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="votreenseigne.fr" autocomplete="off" />
   </div>
   <div class="champ">
     <label for="domaine_chez">Si vous en avez déjà une, chez qui l'avez-vous prise ?</label>
@@ -240,8 +244,8 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   </div>
 
   <div class="champ">
-    <label>2. Avez-vous une adresse mail à votre nom de salon ?
-      <span class="aide">Du type contact@monsalon.fr. C'est elle qui enverra les confirmations et les rappels à vos clients. Une adresse Gmail ou Orange ne convient pas pour ça.</span></label>
+    <label>2. Avez-vous une adresse mail à votre nom ?
+      <span class="aide">Du type contact@votreenseigne.fr. C'est elle qui enverra les confirmations et les rappels à vos clients. Une adresse Gmail ou Orange ne convient pas pour ça.</span></label>
     <div class="choix" data-radio="a_mail">
       <span class="radio" data-val="oui">Oui</span>
       <span class="radio" data-val="non">Non, je n'en ai pas</span>
@@ -259,28 +263,28 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   </div>
 </section>
 
-<!-- ═══ 1. SALON ═══ -->
+<!-- ═══ 1. ACTIVITÉ ═══ -->
 <section>
-  <h2><span class="num">1</span>Votre salon</h2>
+  <h2><span class="num">1</span>Votre activité</h2>
   <p class="intro">Ce qui s'affichera dans l'appli et sur les messages envoyés à vos clients.</p>
 
   <div class="champ">
     <label for="nom">Le nom de votre enseigne <span class="aide">Exactement comme il doit s'écrire, majuscules comprises.</span></label>
-    <input id="nom" name="nom" placeholder="Adam Barber" autocomplete="organization" />
+    <input id="nom" name="nom" enterkeyhint="next" autocapitalize="words" placeholder="Le Comptoir de Léa" autocomplete="organization" />
   </div>
   <div class="duo">
     <div class="champ">
       <label for="email_notification">Sur quelle adresse être prévenu d'un rendez-vous ?</label>
-      <input id="email_notification" name="email_notification" type="email" placeholder="vous@exemple.fr" autocomplete="email" />
+      <input id="email_notification" name="email_notification" type="email" inputmode="email" enterkeyhint="next" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="vous@exemple.fr" autocomplete="email" />
     </div>
     <div class="champ">
-      <label for="telephone">Le téléphone du salon</label>
-      <input id="telephone" name="telephone" type="tel" placeholder="06 12 34 56 78" autocomplete="tel" />
+      <label for="telephone">Votre téléphone</label>
+      <input id="telephone" name="telephone" type="tel" inputmode="tel" enterkeyhint="next" placeholder="06 12 34 56 78" autocomplete="tel" />
     </div>
   </div>
   <div class="champ">
-    <label for="adresse">L'adresse du salon <span class="aide">Numéro, rue, code postal, ville. Elle devient un lien vers le plan, sous vos horaires.</span></label>
-    <input id="adresse" name="adresse" placeholder="12 rue des Lilas, 60000 Beauvais" autocomplete="street-address" />
+    <label for="adresse">Votre adresse <span class="aide">Numéro, rue, code postal, ville. Elle devient un lien vers le plan, sous vos horaires.</span></label>
+    <input id="adresse" name="adresse" enterkeyhint="next" autocapitalize="words" placeholder="12 rue des Lilas, 60000 Beauvais" autocomplete="street-address" />
   </div>
 </section>
 
@@ -289,6 +293,9 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <h2><span class="num">2</span>Vos horaires</h2>
   <p class="intro">Marquez « Fermé » les jours où vous n'ouvrez pas : ils n'apparaîtront pas dans l'appli.</p>
   <div id="jours"></div>
+  <button type="button" class="ajouter" id="copier-horaires" hidden>
+    ⇊ Appliquer ces horaires aux autres jours
+  </button>
 
   <div class="champ" style="margin-top:18px">
     <label for="dernier">À quelle heure le dernier rendez-vous peut-il commencer ?
@@ -312,8 +319,8 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
   <div class="note">
     <b>Une prestation qui dure rarement pareil ?</b> Une couleur courte et une couleur longue,
-    par exemple. Créez-en deux, avec la durée juste pour chacune. C'est plus clair pour vos
-    clients, et votre agenda reste exact.
+    un massage de 30 minutes et un d'une heure. Créez-en deux, avec la durée juste pour chacune.
+    C'est plus clair pour vos clients, et votre agenda reste exact.
   </div>
 </section>
 
@@ -323,7 +330,8 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <p class="intro">Vendez-vous des produits qu'un client peut ajouter à sa réservation ?
      Vous pourrez en ajouter et en retirer vous-même ensuite, sans passer par moi.</p>
   <div class="champ">
-    <input id="produits" name="produits" placeholder="Cire, laque, soin… séparés par des virgules" autocomplete="off" />
+    <label for="produits">Vos produits à la vente</label>
+    <input id="produits" name="produits" placeholder="Cire, huile, vernis, soin… séparés par des virgules" autocomplete="off" />
   </div>
 </section>
 
@@ -334,11 +342,11 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   <div class="duo">
     <div class="champ">
       <label for="instagram">Instagram</label>
-      <input id="instagram" name="instagram" placeholder="@monsalon" autocomplete="off" />
+      <input id="instagram" name="instagram" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" placeholder="@votreenseigne" autocomplete="off" />
     </div>
     <div class="champ">
       <label for="tiktok">TikTok</label>
-      <input id="tiktok" name="tiktok" placeholder="@monsalon" autocomplete="off" />
+      <input id="tiktok" name="tiktok" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="@votreenseigne" autocomplete="off" />
     </div>
   </div>
 </section>
@@ -372,15 +380,15 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
      figureront sur une page dédiée, comme sur n'importe quel site professionnel.</p>
   <div class="duo">
     <div class="champ"><label for="raison_sociale">Raison sociale exacte</label>
-      <input id="raison_sociale" name="raison_sociale" autocomplete="off" /></div>
+      <input id="raison_sociale" name="raison_sociale" autocapitalize="words" enterkeyhint="next" autocomplete="off" /></div>
     <div class="champ"><label for="forme">Forme juridique <span class="aide">Micro-entreprise, EI, SARL…</span></label>
       <input id="forme" name="forme" autocomplete="off" /></div>
   </div>
   <div class="duo">
     <div class="champ"><label for="siret">Numéro SIRET</label>
-      <input id="siret" name="siret" inputmode="numeric" autocomplete="off" /></div>
+      <input id="siret" name="siret" inputmode="numeric" enterkeyhint="next" autocomplete="off" autocomplete="off" /></div>
     <div class="champ"><label for="responsable">Nom et prénom du responsable</label>
-      <input id="responsable" name="responsable" autocomplete="name" /></div>
+      <input id="responsable" name="responsable" autocapitalize="words" enterkeyhint="done" autocomplete="name" /></div>
   </div>
 </section>
 
@@ -416,7 +424,7 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
 
 <div class="pied">
   <div class="wrap">
-    <span class="reste" id="reste">Commencez par les trois premières questions.</span>
+    <span class="reste" id="reste" aria-live="polite">Commencez par les trois premières questions.</span>
     <button type="button" class="envoyer" id="envoyer">Envoyer</button>
   </div>
 </div>
@@ -461,11 +469,11 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     el.className = 'presta';
     el.innerHTML =
       '<div class="haut">' +
-        '<input data-p="nom" placeholder="Coupe + Barbe" aria-label="Nom de la prestation" />' +
+        '<input data-p="nom" enterkeyhint="next" autocapitalize="sentences" placeholder="Coupe, pose gel, massage 30 min…" aria-label="Nom de la prestation" />' +
         '<button type="button" class="retirer" aria-label="Retirer">&times;</button>' +
       '</div>' +
       '<div class="bas">' +
-        '<input data-p="duree" class="num-only" type="number" min="5" step="5" placeholder="Durée en minutes" inputmode="numeric" aria-label="Durée en minutes" />' +
+        '<input data-p="duree" class="num-only" type="number" enterkeyhint="next" min="5" step="5" placeholder="Durée en minutes" inputmode="numeric" aria-label="Durée en minutes" />' +
         '<input data-p="prix" class="num-only" type="number" min="0" step="1" placeholder="Prix en €" inputmode="numeric" aria-label="Prix en euros" />' +
         '<span class="radio" data-devis>Sur devis</span>' +
       '</div>';
@@ -488,6 +496,41 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
     var d = el.querySelector('[data-devis]'); if (d) d.classList.remove('on');
   }
   for (var i = 0; i < 3; i++) ligne();
+  /* ─── Recopier les horaires ─── */
+  var boutonCopie = document.getElementById('copier-horaires');
+  function premierRempli(){
+    return [].slice.call(zoneJours.querySelectorAll('.jour')).filter(function(d){
+      return !d.classList.contains('ferme') &&
+             d.querySelector('[data-h=debut]').value && d.querySelector('[data-h=fin]').value;
+    })[0] || null;
+  }
+  function majCopie(){
+    var src = premierRempli();
+    // N'apparaît que s'il reste des jours à remplir : un bouton qui ne ferait
+    // rien est pire qu'un bouton absent.
+    var reste = src && [].slice.call(zoneJours.querySelectorAll('.jour')).some(function(d){
+      return d !== src && !d.classList.contains('ferme') && !d.querySelector('[data-h=debut]').value;
+    });
+    boutonCopie.hidden = !reste;
+    if (src) boutonCopie.textContent = '⇊ Appliquer les horaires du ' + src.dataset.jour + ' aux autres jours';
+  }
+  boutonCopie.addEventListener('click', function(){
+    var src = premierRempli(); if (!src) return;
+    var d0 = src.querySelector('[data-h=debut]').value, f0 = src.querySelector('[data-h=fin]').value;
+    var n = 0;
+    zoneJours.querySelectorAll('.jour').forEach(function(d){
+      if (d === src || d.classList.contains('ferme')) return;
+      if (d.querySelector('[data-h=debut]').value) return;   // ne jamais écraser une saisie
+      d.querySelector('[data-h=debut]').value = d0;
+      d.querySelector('[data-h=fin]').value = f0;
+      n++;
+    });
+    boutonCopie.textContent = n + ' jour' + (n > 1 ? 's' : '') + ' rempli' + (n > 1 ? 's' : '') + ' ✓';
+    if (navigator.vibrate) navigator.vibrate(12);
+    majuscule();
+    setTimeout(majCopie, 1600);
+  });
+
   document.getElementById('ajouter-presta').addEventListener('click', function(){
     ligne().querySelector('[data-p=nom]').focus();
   });
@@ -565,32 +608,41 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   /* ─── Progression ─── */
   // Les questions comptées sont celles SANS lesquelles je ne peux pas livrer.
   // Compter les champs facultatifs ferait stagner la jauge sans raison.
+  // Chaque manque connaît le champ à montrer : sur une page de 6 700 px,
+  // dire « il manque votre SIRET » sans y emmener revient à ne rien dire.
   function manquants(){
     var e = etat(), m = [];
-    if (!e.champs.domaine) m.push('votre adresse internet');
-    if (!e.radios.a_mail) m.push('la question du mail');
-    if (!e.champs.nom) m.push('le nom de l’enseigne');
-    if (!e.champs.email_notification) m.push('votre adresse mail');
-    if (!e.champs.telephone) m.push('votre téléphone');
+    var faut = function(cond, texte, sel){ if (cond) m.push({ texte: texte, sel: sel }); };
+    faut(!e.champs.domaine, 'votre adresse internet', '#domaine');
+    faut(!e.radios.a_mail, 'la question du mail', '[data-radio=a_mail]');
+    faut(!e.champs.nom, 'le nom de votre enseigne', '#nom');
+    faut(!e.champs.email_notification, 'votre adresse mail', '#email_notification');
+    faut(!e.champs.telephone, 'votre téléphone', '#telephone');
     var ouvert = Object.keys(e.jours).some(function(j){ return !e.jours[j].ferme && e.jours[j].debut; });
-    if (!ouvert) m.push('vos horaires');
-    var presta = e.prestations.filter(function(p){ return p.nom.trim(); });
-    if (!presta.length) m.push('vos prestations');
-    if (!e.champs.siret) m.push('votre SIRET');
-    if (!e.champs.responsable) m.push('le responsable');
+    faut(!ouvert, 'vos horaires', '#jours');
+    faut(!e.prestations.filter(function(p){ return p.nom.trim(); }).length, 'vos prestations', '#prestations [data-p=nom]');
+    faut(!e.champs.siret, 'votre SIRET', '#siret');
+    faut(!e.champs.responsable, 'le responsable', '#responsable');
     return m;
+  }
+  function allerA(sel){
+    var el = document.querySelector(sel); if (!el) return;
+    var doux = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: doux ? 'smooth' : 'auto', block: 'center' });
+    if (typeof el.focus === 'function') setTimeout(function(){ el.focus({ preventScroll: true }); }, doux ? 420 : 0);
   }
   var TOTAL = 9;
   function majuscule(){
     sauver();
+    if (typeof majCopie === 'function') majCopie();
     var m = manquants(), fait = TOTAL - m.length;
     var pct = Math.round(fait / TOTAL * 100);
     document.getElementById('jauge').style.width = pct + '%';
     document.getElementById('pct').textContent = pct + ' %';
     var reste = document.getElementById('reste');
     if (!m.length) reste.textContent = 'Tout y est. Vous pouvez envoyer.';
-    else if (m.length === 1) reste.textContent = 'Il manque ' + m[0] + '.';
-    else reste.textContent = 'Il reste ' + m.length + ' choses : ' + m.slice(0, 2).join(', ') + '…';
+    else if (m.length === 1) reste.textContent = 'Il manque ' + m[0].texte + '.';
+    else reste.textContent = 'Il reste ' + m.length + ' choses : ' + m.slice(0, 2).map(function(x){ return x.texte; }).join(', ') + '…';
   }
   form.addEventListener('input', majuscule);
   form.addEventListener('change', majuscule);
@@ -691,11 +743,10 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
   bouton.addEventListener('click', function(){
     var m = manquants();
     if (m.length){
-      alerte('err', 'Il manque encore&nbsp;: <b>' + m.join(', ') + '</b>. ' +
+      alerte('err', 'Il manque encore&nbsp;: <b>' + m.map(function(x){ return x.texte; }).join(', ') + '</b>. ' +
         'Vous pouvez quand même envoyer si vous préférez qu\'on en parle de vive voix — ' +
         'recliquez sur Envoyer.');
-      bouton.dataset.force = '1';
-      if (bouton.dataset.vu) { /* deuxième clic : on laisse passer */ } else { bouton.dataset.vu = '1'; return; }
+      if (!bouton.dataset.vu){ bouton.dataset.vu = '1'; allerA(m[0].sel); return; }
     }
     var k = cfg();
     if (!k || !k.service_id || !k.public_key){
