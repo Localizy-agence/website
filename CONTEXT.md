@@ -4,9 +4,13 @@
 
 Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 
-**URL de test** : https://new.localizy.fr  
-**URL production** : https://localizy.fr (actuellement WordPress, à remplacer quand prêt)  
+**URL production** : https://localizy.fr — sert le site Next (le WordPress a été remplacé)  
 **Repo GitHub** : https://github.com/Localizy-agence/website
+
+> `new.localizy.fr` ne répond plus : le sous-domaine servait de préproduction avant la
+> bascule. Le docroot de `localizy.fr` a été repointé sur son dossier, si bien que les
+> secrets FTP n'ont pas eu à changer — c'est l'hébergement qui a bougé, pas le pipeline.
+> Il n'y a donc plus d'URL de préproduction : un push sur `main` publie directement.
 
 ### Stack technique
 - Next.js 16 avec App Router
@@ -26,6 +30,8 @@ Site vitrine Localizy déployé automatiquement sur o2switch via GitHub Actions.
 - Carousel avis Google (9 avis réels)
 - Chatbot Localizy intégré sur toutes les pages
 - Landing page **IzyRESA** (`/izy-reservation/`), non reliée au site (accès par le lien uniquement)
+- Formulaire client **`/fiche/`** : le client renseigne les informations de son appli, envoi par EmailJS
+- Mesure d'audience Cloudflare sur tout le site (sans cookie, donc sans bandeau de consentement)
 - Déploiement automatique sur push vers main
 
 ### Fichiers clés
@@ -67,7 +73,10 @@ src/
 │   └── assets.ts
 public/
 ├── izy-reservation/
-│   └── index.html        # Landing IzyRESA (HTML autonome, hors Next)
+│   ├── index.html        # Landing IzyRESA (HTML autonome, hors Next)
+│   └── og-izy-reservation.png
+├── fiche/
+│   └── index.html        # Formulaire client IzyRESA (HTML autonome)
 ├── chatbot/              # Widget chatbot Localizy
 │   ├── chatbot.js
 │   ├── chatbot.css
@@ -84,12 +93,15 @@ public/
 À chaque push sur `main` :
 1. GitHub Actions build le projet
 2. Upload via FTP vers o2switch
-3. Site mis à jour sur new.localizy.fr
+3. Site mis à jour sur https://localizy.fr (~2 min)
 
 ### Secrets GitHub configurés
 - `FTP_HOST` : ftp.localizy.fr
-- `FTP_USER` : website@new.localizy.fr
+- `FTP_USER` : website@new.localizy.fr — nom historique, le dossier est aujourd'hui celui de `localizy.fr`
 - `FTP_PASSWORD` : (secret)
+
+⚠️ Le workflow n'envoie que `out/`. Tout ce qui n'est pas produit par le build —
+`chatbot/config.js` en tête — doit être édité **à la main sur le serveur** via cPanel.
 
 ### Commandes
 ```bash
@@ -128,12 +140,12 @@ git add . && git commit -m "message" && git push
 - [x] Mentions légales + politique de confidentialité remplies
 - [ ] Ajouter visuels LinkedIn
 - [ ] Blog (reporté)
-- [ ] Quand prêt : changer les secrets FTP pour pointer vers localizy.fr (remplacer WordPress)
+- [x] Bascule sur localizy.fr : le docroot pointe sur le dossier déployé, WordPress retiré
+- [ ] Passer le champ *Reply To* des templates EmailJS sur `{{reply_to}}` (voir plus bas)
 
 ## Notes
 - "Lyon" a été remplacé par "Oise" partout
 - Les images réalisations sont dans `public/images/` (webp optimisés < 100 Ko)
-- Le WordPress actuel reste sur localizy.fr jusqu'à validation du nouveau site
 - Coordonnées : contact@localizy.fr / 07 81 18 94 24 — note Google réelle : 5/5
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
