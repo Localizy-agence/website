@@ -27,7 +27,11 @@ export default function RootLayout({
           src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
           strategy="beforeInteractive"
         />
-        <Script src="/chatbot/config.js" strategy="beforeInteractive" />
+        {/* ?v= : le fichier est édité à la main sur le serveur et n'a pas d'en-tête
+            de cache. Sans ce marqueur, un navigateur qui l'a déjà en cache garde
+            l'ancien service_id EmailJS et tous ses envois échouent. À incrémenter
+            à chaque modification de config.js (voir CONTEXT.md). */}
+        <Script src="/chatbot/config.js?v=2" strategy="beforeInteractive" />
         <Script src="/chatbot/chatbot.js" strategy="afterInteractive" />
         {/* Mesure d'audience Cloudflare : sans cookie, sans identifiant, donc
             aucun bandeau de consentement (voir /confidentialite).

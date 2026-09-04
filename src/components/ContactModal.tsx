@@ -93,6 +93,11 @@ const timeframeLabels: Record<string, string> = {
   "later": "Plus tard / Je me renseigne",
 };
 
+// Outlook refuse l'envoi (412) si le Reply-To du template n'est pas une adresse
+// valide. On vérifie donc le format avant l'envoi plutôt que de laisser le
+// visiteur sur un « une erreur est survenue » qu'il ne peut pas comprendre.
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+
 function ContactModal({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,6 +164,12 @@ function ContactModal({ onClose }: { onClose: () => void }) {
       return;
     }
 
+    if (!isValidEmail(formData.email)) {
+      setError("Merci de saisir une adresse email valide pour qu'on puisse vous répondre.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const CONTACT_TEMPLATE_ID = "template_mn1zobn";
 
     const servicesSelected = formData.services.map((s) => serviceLabels[s] || s).join(", ") || "Non renseigné";
@@ -169,7 +180,8 @@ function ContactModal({ onClose }: { onClose: () => void }) {
     const emailParams = {
       prenom: formData.prenom || "Non renseigné",
       nom: formData.nom || "Non renseigné",
-      email: formData.email || "Non renseigné",
+      email: formData.email.trim(),
+      reply_to: formData.email.trim(),
       telephone: formData.telephone || "Non renseigné",
       entreprise: formData.entreprise || "Non renseigné",
       secteur: formData.secteur || "Non renseigné",
@@ -227,7 +239,7 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
     }
   };
 
-  const canProceedStep1 = formData.prenom && formData.email;
+  const canProceedStep1 = formData.prenom && isValidEmail(formData.email);
   const canProceedStep2 = formData.services.length > 0;
   const canSubmit = canProceedStep1 && canProceedStep2;
 
@@ -471,6 +483,11 @@ Message: ${formData.message || "Aucun"}`.replace(/\n{2,}/g, "\n"),
                       placeholder="jean@entreprise.fr"
                       style={inputStyle}
                     />
+                    {formData.email.trim() !== "" && !isValidEmail(formData.email) && (
+                      <p style={{ fontSize: "13px", color: "#DC5B5B", margin: "6px 0 0" }}>
+                        Cette adresse semble incomplète.
+                      </p>
+                    )}
                   </div>
 
                   <div>

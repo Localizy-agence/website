@@ -995,6 +995,8 @@ footer.bas a{color:var(--navy);display:inline-block;padding:12px 4px;min-height:
       besoin: recap(),
       date: new Date().toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}),
       name: 'Fiche client IzyRESA',
+      // Reply-To explicite : Outlook refuse l'envoi si la propriete est vide.
+      reply_to: c.email_notification || '',
       conversation_complete: recap()
     };
     var envoi;

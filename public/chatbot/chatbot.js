@@ -1845,7 +1845,14 @@
       besoin: state.info.besoin || "Non renseigné",
       conversation_complete: buildConversationTranscript(),
       date: nowFr(),
-      name: "Chatbot " + CONFIG.client.nom
+      name: "Chatbot " + CONFIG.client.nom,
+      // Outlook rejette l'envoi (412) si le Reply-To n'est pas une adresse
+      // valide : quand le visiteur n'a pas laisse d'email, on retombe sur la
+      // boite de notification plutot que d'echouer.
+      reply_to: (function (m) {
+        m = String(m || "").trim();
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m) ? m : (CONFIG.client.email_notification || "");
+      })(extra.email || state.info.email)
     };
   }
 
@@ -1906,7 +1913,8 @@
       besoin: "Test de configuration EmailJS depuis la console.",
       conversation_complete: "Prospect : Bonjour\nAssistant : Bonjour, comment puis-je vous aider ?\nProspect : Ceci est un test.",
       date: nowFr(),
-      name: "Chatbot " + CONFIG.client.nom
+      name: "Chatbot " + CONFIG.client.nom,
+      reply_to: "test@example.com"
     };
     console.log("[Assistant] testEmailJS : envoi en cours…");
     emailjsRaw(params, function (ok) {

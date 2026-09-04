@@ -147,6 +147,13 @@ git add . && git commit -m "message" && git push
   - `The service ID not found` → le `service_id` est obsolète (cas rencontré le 04/09/2026)
   - `The template ID not found` → clé + service OK, l'origine est autorisée
 - Après correction, penser à recharger en vidant le cache : `config.js` est chargé en `beforeInteractive`.
+- Le fichier est servi **sans en-tête de cache** (ni `Cache-Control` ni `ETag`, seulement `Last-Modified`) : les navigateurs le gardent sans revalider. `layout.tsx` le charge donc via `/chatbot/config.js?v=N` — **incrémenter ce `N` à chaque modification de `config.js`**, sinon les visiteurs déjà venus continuent d'utiliser l'ancienne configuration et tous leurs envois échouent en silence.
+
+### ⚠️ EmailJS — le Reply-To doit être une adresse valide
+- Le service Outlook refuse l'envoi avec **`412 Precondition Failed — A participant without an email address is not allowed for ReplyTo property`** dès que le champ *Reply To* du template ne contient pas une adresse bien formée.
+- Les quatre intégrations envoient donc un paramètre **`reply_to`** explicite, avec repli sur `email_notification` quand le prospect n'a pas laissé d'adresse (chatbot, fiche client).
+- Le formulaire de contact **valide le format de l'email** avant de laisser passer l'étape 1 (`isValidEmail` dans `ContactModal.tsx`) : sans ça, une adresse mal saisie produisait un « Une erreur est survenue » incompréhensible pour le visiteur.
+- ⚠️ Pour que `reply_to` serve réellement, le champ *Reply To* des templates doit pointer sur `{{reply_to}}` dans le dashboard EmailJS. S'il pointe sur `{{email}}`, c'est la validation du format qui protège du 412.
 
 ### Landing IzyRESA
 
