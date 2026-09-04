@@ -138,6 +138,16 @@ git add . && git commit -m "message" && git push
 - Chatbot : `config.js` doit être créé manuellement sur le serveur (contient clés EmailJS)
 - Formulaire contact : utilise le template EmailJS `template_mn1zobn` (chatbot : `template_w26i574`)
 
+### ⚠️ EmailJS — reconnecter un service change le `service_id`
+- Le `service_id` vit **uniquement** dans `chatbot/config.js`, qui est gitignoré et n'est **pas** déployé par GitHub Actions (le workflow n'envoie que `out/`). Il doit être édité **à la main sur le serveur** via cPanel — un `git push` ne corrige jamais la prod.
+- Ce même `service_id` est partagé par les **trois** intégrations : formulaire de contact, chatbot et landing IzyRESA. S'il est faux, les trois cassent en même temps.
+- **Piège** : reconnecter/réautoriser le service d'envoi dans EmailJS (ex. expiration du jeton Outlook) crée un **nouveau service avec un nouvel ID** et supprime l'ancien. Les envois de test du dashboard continuent de marcher (ils utilisent le nouveau service) alors que le site échoue en silence — d'où l'impression trompeuse que « ça vient du sender » ou de la clé publique.
+- **Diagnostic sans envoyer d'email** : `POST https://api.emailjs.com/api/v1.0/email/send` avec un `template_id` bidon et l'en-tête `Origin` du site. EmailJS valide dans l'ordre clé → service → template, donc la réponse dit exactement ce qui casse :
+  - `Account not found` → la public key est mauvaise
+  - `The service ID not found` → le `service_id` est obsolète (cas rencontré le 04/09/2026)
+  - `The template ID not found` → clé + service OK, l'origine est autorisée
+- Après correction, penser à recharger en vidant le cache : `config.js` est chargé en `beforeInteractive`.
+
 ### Landing IzyRESA
 
 > 🚨 **`public/izy-reservation/index.html` est un fichier GÉNÉRÉ. Ne le modifiez pas ici.**
