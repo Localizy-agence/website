@@ -140,7 +140,7 @@ git add . && git commit -m "message" && git push
 
 ### ⚠️ EmailJS — reconnecter un service change le `service_id`
 - Le `service_id` vit **uniquement** dans `chatbot/config.js`, qui est gitignoré et n'est **pas** déployé par GitHub Actions (le workflow n'envoie que `out/`). Il doit être édité **à la main sur le serveur** via cPanel — un `git push` ne corrige jamais la prod.
-- Ce même `service_id` est partagé par les **trois** intégrations : formulaire de contact, chatbot et landing IzyRESA. S'il est faux, les trois cassent en même temps.
+- Ce même `service_id` est partagé par les **quatre** intégrations : formulaire de contact (modal), chatbot, landing IzyRESA et formulaire client `/fiche/`. S'il est faux, les quatre cassent en même temps.
 - **Piège** : reconnecter/réautoriser le service d'envoi dans EmailJS (ex. expiration du jeton Outlook) crée un **nouveau service avec un nouvel ID** et supprime l'ancien. Les envois de test du dashboard continuent de marcher (ils utilisent le nouveau service) alors que le site échoue en silence — d'où l'impression trompeuse que « ça vient du sender » ou de la clé publique.
 - **Diagnostic sans envoyer d'email** : `POST https://api.emailjs.com/api/v1.0/email/send` avec un `template_id` bidon et l'en-tête `Origin` du site. EmailJS valide dans l'ordre clé → service → template, donc la réponse dit exactement ce qui casse :
   - `Account not found` → la public key est mauvaise
