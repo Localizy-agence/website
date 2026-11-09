@@ -180,6 +180,8 @@ git add . && git commit -m "message" && git push
 > 2. `node build/inline.js` — il produit trois fichiers ;
 > 3. copier **`izy-reservation-site.html`** (le document complet, le seul déployable)
 >    vers `public/izy-reservation/index.html` ;
+>    puis copier `build/captures/*.webp` vers `public/izy-reservation/img/` (captures
+>    servies à part depuis le 08/11/2026) et `Livrables/og-izy-reservation.png` ;
 > 4. commit + push.
 >
 > ⚠️ **Le piège :** `izy-reservation-landing.html` est un *fragment* sans `<head>`,
