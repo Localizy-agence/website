@@ -233,3 +233,11 @@ git add . && git commit -m "message" && git push
 - Pour screenshot mobile fidèle : **émulation CDP** (`Emulation.setDeviceMetricsOverride`), pas `chrome --window-size` (n'applique pas le meta viewport → faux débordement).
 - Turbopack sert parfois du **CSS périmé** en dev : ne pas `build` pendant que `dev` tourne ; redémarrer avec `rm -rf .next`.
 - Push GitHub avec le compte **`Localizy-agence`** (pas `Rickko18`).
+
+### `.htaccess` du serveur (hors dépôt, à ne pas perdre)
+Le docroot de localizy.fr porte un bloc Passenger vers une appli Node de démonstration
+(`~/website/app.js`, « It works! ») : elle répondait à toute adresse de dossier sans barre
+finale (`/izy-reservation`, `/mentions-legales`…). Ajouté le 09/11/2026 à la fin du
+`.htaccess` du serveur : redirection 301 vers l'adresse avec `/`, et `Cache-Control: no-cache`
+sur les `.html` (sans consigne, Safari gardait l'ancienne landing plusieurs jours).
+Copie d'avant : `.htaccess.avant-cache-20261109`. Le déploiement FTP ne touche pas ce fichier.
